@@ -31,7 +31,7 @@ export const MobileNavigation: React.FC<MobileNavigationProps> = ({
   return (
     <nav
       id="mobile-bottom-navigation"
-      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#021E31]/95 backdrop-blur-md border-t border-sky-900/60 pb- safe-area"
+      className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#021E31]/95 backdrop-blur-md border-t border-sky-900/60 mobile-nav-safe"
     >
       <div className="grid grid-cols-5 h-16 items-center px-1">
         {/* Home */}

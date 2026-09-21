@@ -78,7 +78,8 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
       const rect = canvas.parentElement.getBoundingClientRect();
       width = rect.width;
       height = rect.height || 650;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      isMobile = isTouchDevice() || width < 768;
+      dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.15 : 1.6);
 
       canvas.width = Math.floor(width * dpr);
       canvas.height = Math.floor(height * dpr);
@@ -87,8 +88,6 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
 
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
-
-      isMobile = isTouchDevice() || width < 768;
     };
 
     handleResize();
@@ -227,7 +226,7 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
     ];
 
     // Bubbles
-    const bubbles: Bubble[] = Array.from({ length: 30 }, () => ({
+    const bubbles: Bubble[] = Array.from({ length: isMobile ? 12 : 26 }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
       radius: 1.2 + Math.random() * 3.2,
@@ -476,9 +475,20 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
     // ANIMATION LOOP (Delta-time & Performance)
     // ==========================================
     let lastTime = performance.now();
+    let lastPaintTime = 0;
     let tick = 0;
+    let stageVisible = true;
+    const frameInterval = () => (isMobile ? 1000 / 30 : 1000 / 50);
 
     const render = (currentTime: number) => {
+      if (document.hidden || !stageVisible) return;
+      // Keep mobile canvas work bounded; 30fps with a reduced backing resolution
+      // preserves natural fish motion while avoiding excessive GPU/battery load.
+      if (currentTime - lastPaintTime < frameInterval()) {
+        animationFrameId = requestAnimationFrame(render);
+        return;
+      }
+      lastPaintTime = currentTime;
       const dtMs = currentTime - lastTime;
       lastTime = currentTime;
       // Cap delta time to prevent giant physics jumps on tab backgrounding
@@ -765,9 +775,31 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
       animationFrameId = requestAnimationFrame(render);
     };
 
+    const handleVisibilityChange = () => {
+      if (!document.hidden && stageVisible) {
+        lastTime = performance.now();
+        animationFrameId = requestAnimationFrame(render);
+      } else {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    const stageObserver = container ? new IntersectionObserver(([entry]) => {
+      stageVisible = entry.isIntersecting;
+      if (stageVisible && !document.hidden) {
+        cancelAnimationFrame(animationFrameId);
+        lastTime = performance.now();
+        animationFrameId = requestAnimationFrame(render);
+      } else {
+        cancelAnimationFrame(animationFrameId);
+      }
+    }, { threshold: 0.02 }) : null;
+    if (container && stageObserver) stageObserver.observe(container);
     animationFrameId = requestAnimationFrame(render);
 
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      stageObserver?.disconnect();
       window.removeEventListener('resize', handleResize);
       motionQuery.removeEventListener('change', handleMotionChange);
       if (container) {
@@ -860,15 +892,15 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
 
             {/* Main Headline */}
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight font-['Manrope',sans-serif] leading-[1.15] sm:leading-[1.12] mb-4 sm:mb-6 drop-shadow-md">
-              Guppies Make <br />
+              Bring Home a Little <br />
               <span className="bg-gradient-to-r from-[#50D4EE] via-[#80E8FF] to-white bg-clip-text text-transparent">
-                Life Brighter.
+                Underwater Wonder.
               </span>
             </h1>
 
             {/* Supporting paragraph */}
             <p className="text-sm sm:text-base lg:text-lg text-[#E8F9FC]/90 leading-relaxed mb-6 sm:mb-8 max-w-xl font-normal drop-shadow-xs">
-              Selected guppy pairs, fish food, and starter combo packs in a green planted aquarium setting with rocky hiding spaces. Delivery is offered to enabled serviceable PIN codes within Tamil Nadu.
+              Discover vivid guppies, everyday fish food and thoughtfully curated aquarium combos. Find your next little underwater favourite—with delivery to enabled serviceable PIN codes across Tamil Nadu.
             </p>
 
             {/* Interactive CTAs */}

@@ -523,6 +523,7 @@ export const HomePage: React.FC<HomePageProps> = ({
           </button>
         </div>
 
+        {careArticles.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {careArticles.map((article) => (
             <div
@@ -561,6 +562,15 @@ export const HomePage: React.FC<HomePageProps> = ({
             </div>
           ))}
         </div>
+        ) : (
+          <div className="rounded-3xl border border-cyan-100 bg-gradient-to-br from-white to-cyan-50 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-sm">
+            <div>
+              <p className="text-sm font-bold text-[#032B42]">New to guppy keeping?</p>
+              <p className="text-sm text-slate-600 mt-1">Explore practical feeding, acclimation and aquarium care tips in our care hub.</p>
+            </div>
+            <button onClick={() => onNavigate('/guppy-care')} className="premium-action-btn shrink-0 bg-[#0875B5] text-white font-bold text-sm px-5 py-3 rounded-xl min-h-[46px] inline-flex items-center justify-center gap-2">Explore Care Tips <ArrowRight className="w-4 h-4" /></button>
+          </div>
+        )}
       </section>
 
     </div>

@@ -449,7 +449,7 @@ button:not(:disabled) {
 /* Mobile-first premium surface: richer depth, faster touch feedback and safe-area spacing. */
 @media (max-width: 640px) {
   body { background: linear-gradient(180deg,#f5fcff 0%,#eefaff 52%,#faffff 100%); }
-  #living-aquarium-stage { min-height: 620px; border-radius: 0 0 32px 32px; }
+  #living-aquarium-stage { min-height: 560px; border-radius: 0 0 28px 28px; }
   #living-aquarium-stage canvas { touch-action: pan-y; }
   main section { scroll-margin-top: 78px; }
   .premium-action-btn { box-shadow: 0 8px 22px rgba(3,43,66,.14); }
@@ -850,3 +850,20 @@ input, select, textarea { font-size: max(16px, 1em); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+
+/* Mobile smoothness pass: reduce expensive compositing while retaining the aquarium mood. */
+@media (max-width: 767px) {
+  #living-aquarium-stage { contain: layout paint; }
+  #living-aquarium-stage canvas { opacity: .82; }
+  .aquatic-page-decor, .aquatic-caustics { display: none; }
+  .aquatic-scene-image { animation-duration: 28s; }
+  .aquatic-light { filter: blur(6px); opacity: .55; }
+  .aquatic-visual { contain: paint; }
+  .group:hover img { transform: none; }
+  .backdrop-blur-md, .backdrop-blur-xl { -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
+/* Keep the bottom tabs clear of Android/iOS gesture bars and page content. */
+.mobile-nav-safe { padding-bottom: max(.45rem, env(safe-area-inset-bottom)); }
+main { padding-bottom: env(safe-area-inset-bottom); }

@@ -63,7 +63,7 @@ export const Header: React.FC<HeaderProps> = ({
   const navLinks = [
     { label: 'Home', route: '/' },
     { label: 'Shop', route: '/shop', hasDropdown: true },
-    { label: 'Guppy Care', route: '/guppy-care' },
+    { label: 'Care Tips', route: '/guppy-care' },
     { label: 'About', route: '/about' },
     { label: 'Contact', route: '/contact' },
   ];
@@ -312,7 +312,14 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
 
             {/* Mobile Drawer Footer */}
-            <div className="pt-4 border-t border-sky-900/60 space-y-2.5">
+            <div className="pt-4 border-t border-sky-900/60 space-y-3">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-xs font-semibold text-slate-300">Language / மொழி</span>
+                <LanguageSwitcher />
+              </div>
+              <button onClick={() => { setMobileMenuOpen(false); onNavigate('/guppy-care'); }} className="w-full rounded-xl border border-cyan-300/20 bg-cyan-300/10 px-3 py-3 text-left text-sm font-semibold text-cyan-100 flex items-center justify-between">
+                <span>Guppy Care Tips</span><ChevronDown className="w-4 h-4 -rotate-90" />
+              </button>
               <p className="text-[10px] text-center text-slate-400">
                 Delivery only to enabled Tamil Nadu service areas
               </p>
