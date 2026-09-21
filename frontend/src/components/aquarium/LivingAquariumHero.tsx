@@ -242,6 +242,7 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
     // POINTER & TOUCH LISTENERS
     // ==========================================
     const handleMouseMove = (e: MouseEvent) => {
+      if (isMobile || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
       const rect = canvas.getBoundingClientRect();
       const clientX = e.clientX - rect.left;
       const clientY = e.clientY - rect.top;
@@ -279,10 +280,7 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
           lastTouchRipple = performance.now();
         }
 
-        primaryFish.pointerX = tx;
-        primaryFish.pointerY = ty;
-        primaryFish.hasPointerTarget = true;
-        primaryFish.lastPointerTime = performance.now();
+        // Touch never steers the fish; autonomous swimming remains active on mobile.
 
       }
     };
@@ -892,15 +890,18 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
 
             {/* Main Headline */}
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight font-['Manrope',sans-serif] leading-[1.15] sm:leading-[1.12] mb-4 sm:mb-6 drop-shadow-md">
-              Bring Home a Little <br />
-              <span className="bg-gradient-to-r from-[#50D4EE] via-[#80E8FF] to-white bg-clip-text text-transparent">
-                Underwater Wonder.
+              <span className="sm:hidden">A Little Ocean,
+                <br /><span className="bg-gradient-to-r from-[#50D4EE] via-[#80E8FF] to-white bg-clip-text text-transparent">Right at Home.</span>
               </span>
+              <span className="hidden sm:inline">Bring Home a Little <br /><span className="bg-gradient-to-r from-[#50D4EE] via-[#80E8FF] to-white bg-clip-text text-transparent">Underwater Wonder.</span></span>
             </h1>
 
             {/* Supporting paragraph */}
             <p className="text-sm sm:text-base lg:text-lg text-[#E8F9FC]/90 leading-relaxed mb-6 sm:mb-8 max-w-xl font-normal drop-shadow-xs">
-              Discover vivid guppies, everyday fish food and thoughtfully curated aquarium combos. Find your next little underwater favourite—with delivery to enabled serviceable PIN codes across Tamil Nadu.
+              <span className="sm:hidden">Colourful guppies. Thoughtful care. A calmer little world.
+                <br /><span className="text-xs text-[#E8F9FC]/75">Delivered across serviceable Tamil Nadu PIN codes.</span>
+              </span>
+              <span className="hidden sm:inline">Discover vivid guppies, everyday fish food and thoughtfully curated aquarium combos. Find your next little underwater favourite—with delivery to enabled serviceable PIN codes across Tamil Nadu.</span>
             </p>
 
             {/* Interactive CTAs */}
