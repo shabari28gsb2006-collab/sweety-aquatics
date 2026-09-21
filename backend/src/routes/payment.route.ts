@@ -1,0 +1,17 @@
+import {Router} from 'express';
+import rateLimit from 'express-rate-limit';
+import {requireAdmin,requireAuth,requireCustomer} from '../middleware/auth.middleware.js';
+import {requireTrustedOrigin} from '../middleware/origin.middleware.js';
+import * as c from '../controllers/payment.controller.js';
+export const paymentRouter=Router();
+const limiter=rateLimit({windowMs:10*60*1000,limit:30,standardHeaders:'draft-7',legacyHeaders:false,message:{success:false,message:'Too many payment attempts. Please wait and retry.'}});
+paymentRouter.get('/admin/reviews',requireAuth,requireAdmin,c.adminPayments);
+paymentRouter.get('/admin/notifications',requireAuth,requireAdmin,c.adminPaymentNotifications);
+paymentRouter.patch('/admin/notifications/:id/read',requireAuth,requireAdmin,requireTrustedOrigin,c.readAdminPaymentNotification);
+paymentRouter.patch('/admin/reviews/:id',requireAuth,requireAdmin,requireTrustedOrigin,c.adminReviewPayment);
+paymentRouter.use(requireAuth,requireCustomer);
+paymentRouter.get('/upi/:id',c.upiStatus);
+paymentRouter.use(requireTrustedOrigin,limiter);
+paymentRouter.post('/upi/intent',c.createUpiIntent);
+paymentRouter.post('/upi/submit',c.submitUpiPayment);
+paymentRouter.post('/upi/cancel',c.cancelUpiIntent);

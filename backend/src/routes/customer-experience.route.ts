@@ -1,0 +1,34 @@
+import { Router } from 'express';
+import { requireAdmin, requireAuth, requireCustomer } from '../middleware/auth.middleware.js';
+import { requireTrustedOrigin } from '../middleware/origin.middleware.js';
+import * as c from '../controllers/customer-experience.controller.js';
+
+export const customerExperienceRouter = Router();
+customerExperienceRouter.get('/contact-settings', c.getContactSettings);
+customerExperienceRouter.get('/arrival-care-guide', c.getArrivalCareGuide);
+customerExperienceRouter.get('/care-articles', c.listCareArticles);
+customerExperienceRouter.get('/care-articles/:slug', c.getCareArticle);
+customerExperienceRouter.use(requireAuth, requireCustomer);
+customerExperienceRouter.get('/availability-alerts', c.listAvailabilityAlerts);
+customerExperienceRouter.post('/availability-alerts/:productId', requireTrustedOrigin, c.subscribeAvailability);
+customerExperienceRouter.delete('/availability-alerts/:productId', requireTrustedOrigin, c.unsubscribeAvailability);
+customerExperienceRouter.get('/recently-viewed', c.listRecentlyViewed);
+customerExperienceRouter.put('/recently-viewed/:productId', requireTrustedOrigin, c.recordRecentlyViewed);
+customerExperienceRouter.get('/aquarium', c.listAquarium);
+customerExperienceRouter.patch('/aquarium/:id', requireTrustedOrigin, c.updateAquarium);
+customerExperienceRouter.get('/reminders', c.listReminders);
+customerExperienceRouter.post('/reminders', requireTrustedOrigin, c.createReminder);
+customerExperienceRouter.patch('/reminders/:id', requireTrustedOrigin, c.updateReminder);
+customerExperienceRouter.delete('/reminders/:id', requireTrustedOrigin, c.deleteReminder);
+customerExperienceRouter.get('/notifications', c.listNotifications);
+customerExperienceRouter.patch('/notifications/read-all', requireTrustedOrigin, c.markAllNotificationsRead);
+customerExperienceRouter.patch('/notifications/:id/read', requireTrustedOrigin, c.markNotificationRead);
+customerExperienceRouter.get('/support-tickets', c.listTickets);
+customerExperienceRouter.post('/support-tickets', requireTrustedOrigin, c.createTicket);
+
+export const adminCustomerExperienceRouter = Router();
+adminCustomerExperienceRouter.use(requireAuth, requireAdmin);
+adminCustomerExperienceRouter.put('/contact-settings', requireTrustedOrigin, c.updateContactSettings);
+adminCustomerExperienceRouter.get('/availability-alerts/counts', c.availabilityAlertCounts);
+adminCustomerExperienceRouter.get('/support-tickets', c.listAdminTickets);
+adminCustomerExperienceRouter.patch('/support-tickets/:id/reply', requireTrustedOrigin, c.replyTicket);

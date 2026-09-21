@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import { requireAuth, requireCustomer } from '../middleware/auth.middleware.js';
+import { requireTrustedOrigin } from '../middleware/origin.middleware.js';
+import { listAddressesController,createAddressController,updateAddressController,deleteAddressController,defaultAddressController } from '../controllers/address.controller.js';
+export const addressRouter=Router();
+addressRouter.use(requireAuth,requireCustomer);
+addressRouter.get('/',listAddressesController);
+addressRouter.post('/',requireTrustedOrigin,createAddressController);
+addressRouter.put('/:id',requireTrustedOrigin,updateAddressController);
+addressRouter.delete('/:id',requireTrustedOrigin,deleteAddressController);
+addressRouter.patch('/:id/default',requireTrustedOrigin,defaultAddressController);

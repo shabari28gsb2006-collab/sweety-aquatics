@@ -1,0 +1,852 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #f8fdff;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Readability floor for supporting copy across mobile and desktop.
+   This intentionally preserves hierarchy while preventing 9–11px text. */
+.text-\[9px\] { font-size: 0.72rem !important; line-height: 1.15rem !important; }
+.text-\[10px\] { font-size: 0.75rem !important; line-height: 1.2rem !important; }
+.text-\[11px\] { font-size: 0.8rem !important; line-height: 1.25rem !important; }
+.text-xs { font-size: 0.84rem !important; line-height: 1.35rem !important; }
+
+p, li, label, button, input, textarea, select {
+  word-spacing: 0.035em;
+}
+
+button, input, textarea, select {
+  font-family: inherit;
+}
+
+@media (min-width: 1024px) {
+  html { font-size: 17px; }
+}
+
+@media (min-width: 1440px) {
+  html { font-size: 18px; }
+}
+
+.aquatic-page-decor {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 12;
+}
+
+.aquatic-page-photo {
+  position: absolute;
+  inset: auto -10vw -18vh -10vw;
+  height: 60vh;
+  background-image:
+    linear-gradient(to top, rgba(3, 43, 66, 0.18), transparent 70%),
+    url('https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=1800&q=70');
+  background-size: cover;
+  background-position: center bottom;
+  opacity: 0.045;
+  filter: saturate(1.2) contrast(1.08);
+  mask-image: linear-gradient(to top, #000 0%, transparent 100%);
+}
+
+
+.aquatic-mini-scene {
+  position: absolute;
+  width: min(280px, 25vw);
+  height: 240px;
+  background-image: url('https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=800&q=65');
+  background-size: cover;
+  background-position: center;
+  opacity: .065;
+  filter: saturate(1.15);
+  mask-image: radial-gradient(ellipse at center, #000 18%, transparent 72%);
+  animation: sceneDrift 18s ease-in-out infinite alternate;
+}
+.scene-left { left: -80px; top: 18vh; }
+.scene-right { right: -85px; bottom: 12vh; transform: scaleX(-1); animation-delay: -7s; }
+
+.aquatic-caustics {
+  position: absolute;
+  inset: 0;
+  opacity: 0.12;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(80, 212, 238, 0.18), transparent 18%),
+    radial-gradient(circle at 78% 28%, rgba(20, 149, 209, 0.12), transparent 22%),
+    linear-gradient(115deg, transparent 0 40%, rgba(80,212,238,0.08) 48%, transparent 56% 100%);
+  background-size: 120% 120%, 130% 130%, 180% 180%;
+  animation: aquaticCaustics 14s ease-in-out infinite alternate;
+}
+
+.aquatic-plant {
+  position: absolute;
+  bottom: -40px;
+  width: 120px;
+  height: 280px;
+  opacity: 0.06;
+  filter: blur(0.3px);
+  background: repeating-linear-gradient(82deg, transparent 0 19px, #0875B5 20px 27px, transparent 28px 45px);
+  border-radius: 70% 30% 0 0;
+  transform-origin: bottom center;
+  animation: plantSway 7s ease-in-out infinite alternate;
+}
+.plant-left { left: 2vw; transform: rotate(-7deg); }
+.plant-right { right: 1vw; transform: scaleX(-1) rotate(-5deg); animation-delay: -3s; }
+
+.decor-fish {
+  position: absolute;
+  color: #0875B5;
+  opacity: 0.055;
+  filter: drop-shadow(0 6px 12px rgba(8,117,181,.12));
+}
+.decor-fish-one { width: 72px; height: 72px; top: 25vh; right: 3vw; animation: decorFishDrift 16s ease-in-out infinite alternate; }
+.decor-fish-two { width: 50px; height: 50px; top: 68vh; left: 4vw; transform: scaleX(-1); animation: decorFishDrift 19s ease-in-out infinite alternate-reverse; }
+
+.aquatic-bubble {
+  position: absolute;
+  bottom: -30px;
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  border: 1px solid rgba(8,117,181,.2);
+  background: rgba(255,255,255,.35);
+  animation: bubbleRiseGlobal 13s linear infinite;
+  opacity: .22;
+}
+.bubble-1 { left: 7%; animation-delay: -3s; }
+.bubble-2 { left: 14%; width: 4px; height: 4px; animation-delay: -8s; }
+.bubble-3 { left: 23%; width: 10px; height: 10px; animation-delay: -1s; }
+.bubble-4 { left: 31%; animation-delay: -10s; }
+.bubble-5 { left: 39%; width: 5px; height: 5px; animation-delay: -5s; }
+.bubble-6 { left: 48%; width: 11px; height: 11px; animation-delay: -11s; }
+.bubble-7 { left: 56%; width: 5px; height: 5px; animation-delay: -2s; }
+.bubble-8 { left: 64%; animation-delay: -6s; }
+.bubble-9 { left: 72%; width: 4px; height: 4px; animation-delay: -9s; }
+.bubble-10 { left: 79%; width: 9px; height: 9px; animation-delay: -4s; }
+.bubble-11 { left: 87%; animation-delay: -7s; }
+.bubble-12 { left: 93%; width: 5px; height: 5px; animation-delay: -12s; }
+.bubble-13 { left: 44%; width: 3px; height: 3px; animation-delay: -6.5s; }
+.bubble-14 { left: 68%; width: 12px; height: 12px; animation-delay: -2.5s; }
+
+@keyframes sceneDrift {
+  from { translate: -4px -3px; scale: 1; }
+  to { translate: 10px 7px; scale: 1.04; }
+}
+@keyframes aquaticCaustics {
+  from { transform: translate3d(-2%, -1%, 0) scale(1); }
+  to { transform: translate3d(2%, 1%, 0) scale(1.04); }
+}
+@keyframes plantSway {
+  from { translate: -3px 0; rotate: -2deg; }
+  to { translate: 5px 0; rotate: 4deg; }
+}
+@keyframes decorFishDrift {
+  from { translate: -8px -5px; rotate: -4deg; }
+  to { translate: 18px 10px; rotate: 5deg; }
+}
+@keyframes bubbleRiseGlobal {
+  0% { transform: translate3d(0, 0, 0) scale(.85); opacity: 0; }
+  10% { opacity: .22; }
+  70% { transform: translate3d(12px, -72vh, 0) scale(1); opacity: .16; }
+  100% { transform: translate3d(-8px, -115vh, 0) scale(1.08); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+  }
+  .aquatic-caustics,
+  .aquatic-mini-scene,
+  .aquatic-plant,
+  .decor-fish,
+  .aquatic-bubble {
+    animation: none !important;
+  }
+}
+
+.hero-caustic-light {
+  background:
+    linear-gradient(115deg, transparent 12%, rgba(128,232,255,.08) 24%, transparent 36%),
+    linear-gradient(78deg, transparent 44%, rgba(255,255,255,.08) 52%, transparent 61%);
+  background-size: 170% 170%, 190% 190%;
+  mix-blend-mode: screen;
+  animation: heroWaterLight 8s ease-in-out infinite alternate;
+}
+@keyframes heroWaterLight {
+  from { background-position: 10% 20%, 90% 40%; opacity: .55; }
+  to { background-position: 60% 55%, 20% 70%; opacity: .9; }
+}
+@media (prefers-reduced-motion: reduce) { .hero-caustic-light { animation: none; } }
+
+/* =========================================================
+   Premium V2.2 motion polish
+   ========================================================= */
+.page-route-enter {
+  animation: pageRouteEnter .18s cubic-bezier(.22,.8,.2,1) both;
+}
+
+@keyframes pageRouteEnter {
+  from { opacity: 0; transform: translate3d(0, 10px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    main section {
+      animation: sectionViewReveal linear both;
+      animation-timeline: view();
+      animation-range: entry 3% cover 23%;
+    }
+  }
+}
+
+@keyframes sectionViewReveal {
+  from { opacity: .2; transform: translate3d(0, 28px, 0) scale(.992); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+/* Living aquarium hero: photographic depth + parallax layers. */
+.hero-aquarium-stage {
+  --hero-parallax-x: 0px;
+  --hero-parallax-y: 0px;
+  isolation: isolate;
+}
+
+.hero-photo-layer {
+  transform: translate3d(calc(var(--hero-parallax-x) * -0.35), calc(var(--hero-parallax-y) * -0.35), 0) scale(1.09);
+  transition: transform 220ms ease-out;
+  filter: saturate(1.22) contrast(1.06) brightness(.84);
+  will-change: transform;
+}
+
+.hero-depth-glow {
+  background:
+    radial-gradient(circle at 72% 42%, rgba(80,212,238,.17), transparent 25%),
+    radial-gradient(circle at 88% 72%, rgba(8,117,181,.18), transparent 30%),
+    linear-gradient(to top, rgba(1,20,31,.55), transparent 38%);
+  mix-blend-mode: screen;
+}
+
+.hero-water-surface {
+  opacity: .72;
+  background:
+    repeating-radial-gradient(ellipse at 50% -18%, rgba(255,255,255,.13) 0 2px, transparent 3px 18px),
+    linear-gradient(to bottom, rgba(128,232,255,.12), transparent 72%);
+  background-size: 180px 42px, 100% 100%;
+  animation: waterSurfaceShift 9s linear infinite;
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+}
+
+@keyframes waterSurfaceShift {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 180px 12px, 0 0; }
+}
+
+.hero-plant-cluster {
+  position: absolute;
+  bottom: -20px;
+  width: 220px;
+  height: 300px;
+  z-index: 2;
+  opacity: .72;
+  pointer-events: none;
+  filter: drop-shadow(0 16px 22px rgba(0,0,0,.22));
+}
+.hero-plants-left { left: -32px; }
+.hero-plants-right { right: -36px; transform: scaleX(-1); }
+.hero-plant-cluster span {
+  position: absolute;
+  bottom: 0;
+  left: 46%;
+  width: 22px;
+  border-radius: 90% 12% 80% 12%;
+  background: linear-gradient(90deg, rgba(3,72,75,.9), rgba(19,128,105,.76) 52%, rgba(69,178,125,.5));
+  transform-origin: 50% 100%;
+  animation: heroPlantSway 5.8s ease-in-out infinite alternate;
+}
+.hero-plant-cluster span:nth-child(1) { height: 245px; transform: rotate(-17deg); animation-delay: -1.2s; }
+.hero-plant-cluster span:nth-child(2) { height: 285px; left: 33%; transform: rotate(-7deg); animation-delay: -3.1s; }
+.hero-plant-cluster span:nth-child(3) { height: 210px; left: 60%; transform: rotate(9deg); animation-delay: -2.4s; }
+.hero-plant-cluster span:nth-child(4) { height: 170px; left: 20%; transform: rotate(-28deg); animation-delay: -4.5s; }
+.hero-plant-cluster span:nth-child(5) { height: 230px; left: 72%; transform: rotate(22deg); animation-delay: -1.8s; }
+.hero-plant-cluster span:nth-child(6) { height: 145px; left: 82%; transform: rotate(34deg); animation-delay: -3.8s; }
+
+@keyframes heroPlantSway {
+  from { translate: -3px 0; rotate: -3deg; }
+  to { translate: 7px -2px; rotate: 5deg; }
+}
+
+/* Ambient page aquarium becomes a subtle living layer instead of icon decoration. */
+.aquatic-page-decor {
+  z-index: 1;
+}
+
+.aquatic-page-photo {
+  opacity: .065;
+  height: 72vh;
+  filter: saturate(1.25) contrast(1.08) brightness(.95);
+}
+
+.aquatic-caustics {
+  opacity: .16;
+}
+
+.aquatic-surface-ripples {
+  position: absolute;
+  top: -12px;
+  left: -10%;
+  width: 120%;
+  height: 110px;
+  opacity: .13;
+  background: repeating-radial-gradient(ellipse at 50% 0, rgba(20,149,209,.35) 0 1px, transparent 2px 19px);
+  background-size: 160px 34px;
+  animation: globalWaterSurface 13s linear infinite;
+  mask-image: linear-gradient(to bottom, #000, transparent);
+}
+
+@keyframes globalWaterSurface {
+  from { transform: translate3d(-30px,0,0); }
+  to { transform: translate3d(130px,8px,0); }
+}
+
+.aquatic-seaweed {
+  position: absolute;
+  bottom: -35px;
+  width: 170px;
+  height: 330px;
+  opacity: .105;
+  filter: blur(.15px);
+}
+.seaweed-left { left: -18px; }
+.seaweed-right { right: -24px; transform: scaleX(-1); }
+.aquatic-seaweed span {
+  position: absolute;
+  left: 48%;
+  bottom: 0;
+  width: 17px;
+  border-radius: 90% 10% 80% 14%;
+  background: linear-gradient(90deg, #075F6B, #15977F 58%, #66C89E);
+  transform-origin: bottom center;
+  animation: seaweedSway 7s ease-in-out infinite alternate;
+}
+.aquatic-seaweed .leaf-1 { height: 285px; left: 46%; animation-delay: -1s; }
+.aquatic-seaweed .leaf-2 { height: 235px; left: 28%; rotate: -18deg; animation-delay: -4s; }
+.aquatic-seaweed .leaf-3 { height: 310px; left: 58%; rotate: 8deg; animation-delay: -2.5s; }
+.aquatic-seaweed .leaf-4 { height: 190px; left: 10%; rotate: -28deg; animation-delay: -5.2s; }
+.aquatic-seaweed .leaf-5 { height: 220px; left: 73%; rotate: 22deg; animation-delay: -3.3s; }
+.aquatic-seaweed .leaf-6 { height: 155px; left: 84%; rotate: 36deg; animation-delay: -6s; }
+
+@keyframes seaweedSway {
+  from { transform: translate3d(-2px,0,0) rotate(-2deg); }
+  to { transform: translate3d(7px,-2px,0) rotate(5deg); }
+}
+
+.decor-guppy {
+  position: absolute;
+  width: 126px;
+  height: auto;
+  opacity: .09;
+  filter: drop-shadow(0 10px 18px rgba(8,117,181,.16));
+  will-change: transform;
+}
+.decor-guppy-one { top: 18vh; left: -150px; animation: guppyCruiseOne 24s linear infinite; }
+.decor-guppy-two { top: 51vh; right: -160px; width: 104px; animation: guppyCruiseTwo 29s linear infinite; }
+.decor-guppy-three { top: 76vh; left: -130px; width: 82px; opacity: .065; animation: guppyCruiseThree 34s linear infinite; }
+
+.decor-guppy-tail {
+  transform-box: fill-box;
+  transform-origin: 95% 50%;
+  animation: decorTailWave .7s ease-in-out infinite alternate;
+}
+.decor-guppy-fin {
+  transform-box: fill-box;
+  transform-origin: 70% 60%;
+  animation: decorFinFlutter 1.05s ease-in-out infinite alternate;
+}
+.fin-lower { animation-delay: -.45s; }
+
+@keyframes decorTailWave {
+  from { transform: rotate(-7deg) scaleY(.96); }
+  to { transform: rotate(8deg) scaleY(1.05); }
+}
+@keyframes decorFinFlutter {
+  from { transform: rotate(-5deg); }
+  to { transform: rotate(9deg); }
+}
+@keyframes guppyCruiseOne {
+  0% { transform: translate3d(0,0,0) rotate(-2deg); }
+  25% { transform: translate3d(34vw,4vh,0) rotate(2deg); }
+  55% { transform: translate3d(72vw,-3vh,0) rotate(-1deg); }
+  100% { transform: translate3d(calc(100vw + 300px),5vh,0) rotate(3deg); }
+}
+@keyframes guppyCruiseTwo {
+  0% { transform: translate3d(0,0,0) rotate(2deg); }
+  40% { transform: translate3d(-52vw,-5vh,0) rotate(-3deg); }
+  100% { transform: translate3d(calc(-100vw - 320px),4vh,0) rotate(2deg); }
+}
+@keyframes guppyCruiseThree {
+  0% { transform: translate3d(0,0,0) rotate(-1deg); }
+  50% { transform: translate3d(58vw,-4vh,0) rotate(4deg); }
+  100% { transform: translate3d(calc(100vw + 260px),2vh,0) rotate(-2deg); }
+}
+
+.bubble-15 { left: 18%; width: 5px; height: 5px; animation-delay: -4.5s; }
+.bubble-16 { left: 35%; width: 8px; height: 8px; animation-delay: -11.5s; }
+.bubble-17 { left: 60%; width: 4px; height: 4px; animation-delay: -7.5s; }
+.bubble-18 { left: 84%; width: 10px; height: 10px; animation-delay: -1.7s; }
+
+/* Keep ambient motion tasteful on small screens. */
+@media (max-width: 767px) {
+  .decor-guppy { opacity: .055; width: 88px; }
+  .aquatic-seaweed { width: 120px; height: 230px; opacity: .07; }
+  .hero-plant-cluster { width: 145px; height: 220px; opacity: .54; }
+  .hero-plant-cluster span:nth-child(1) { height: 175px; }
+  .hero-plant-cluster span:nth-child(2) { height: 205px; }
+  .hero-plant-cluster span:nth-child(3) { height: 160px; }
+  .hero-plant-cluster span:nth-child(4) { height: 130px; }
+  .hero-plant-cluster span:nth-child(5) { height: 165px; }
+  .hero-plant-cluster span:nth-child(6) { height: 115px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-route-enter,
+  main section,
+  .hero-water-surface,
+  .hero-plant-cluster span,
+  .aquatic-surface-ripples,
+  .aquatic-seaweed span,
+  .decor-guppy,
+  .decor-guppy-tail,
+  .decor-guppy-fin {
+    animation: none !important;
+  }
+  .hero-photo-layer { transition: none; transform: scale(1.06); }
+}
+
+/* =========================================================
+   Premium V2.3: navigation, buttons and living background
+   ========================================================= */
+button, a {
+  -webkit-tap-highlight-color: transparent;
+}
+button:not(:disabled) {
+  transition-property: transform, box-shadow, background-color, border-color, color, opacity;
+  transition-duration: 140ms;
+  transition-timing-function: cubic-bezier(.2,.8,.2,1);
+}
+
+/* Mobile-first premium surface: richer depth, faster touch feedback and safe-area spacing. */
+@media (max-width: 640px) {
+  body { background: linear-gradient(180deg,#f5fcff 0%,#eefaff 52%,#faffff 100%); }
+  #living-aquarium-stage { min-height: 620px; border-radius: 0 0 32px 32px; }
+  #living-aquarium-stage canvas { touch-action: pan-y; }
+  main section { scroll-margin-top: 78px; }
+  .premium-action-btn { box-shadow: 0 8px 22px rgba(3,43,66,.14); }
+  input, select, textarea, button, a { touch-action: manipulation; }
+  input, select, textarea { font-size: 16px !important; }
+}
+@media (hover:hover) and (prefers-reduced-motion:no-preference) {
+  button:not(:disabled):hover { transform: translateY(-1.5px); }
+  button:not(:disabled):active { transform: translateY(0) scale(.97); }
+}
+.premium-action-btn {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.premium-action-btn::after {
+  content: '';
+  position: absolute;
+  inset: -120% -45%;
+  background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,.38) 49%, transparent 60%);
+  transform: translateX(-65%) rotate(7deg);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (hover:hover) and (prefers-reduced-motion:no-preference) {
+  .premium-action-btn:hover { box-shadow: 0 10px 28px rgba(8,117,181,.14); }
+  .premium-action-btn:hover::after { opacity: 1; animation: premiumButtonSweep .72s ease-out both; }
+}
+@keyframes premiumButtonSweep { to { transform: translateX(75%) rotate(7deg); } }
+
+.premium-nav-link {
+  position: relative;
+  overflow: hidden;
+}
+.premium-nav-link::before {
+  content: '';
+  position: absolute;
+  left: 18%; right: 18%; bottom: 4px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, #50D4EE, transparent);
+  transform: scaleX(0);
+  opacity: 0;
+  transition: transform .3s ease, opacity .3s ease;
+}
+.premium-nav-link:hover::before { transform: scaleX(1); opacity: .9; }
+.premium-nav-menu {
+  box-shadow: 0 24px 64px rgba(0,20,35,.48), inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+/* Clear, premium trust strip cards */
+#living-aquarium-hero + div .grid > div {
+  min-height: 58px;
+}
+
+/* More visible live green aquatic plants across customer pages. */
+.aquatic-seaweed { opacity: .15; }
+.seaweed-mid {
+  left: 48%;
+  bottom: -95px;
+  width: 145px;
+  height: 265px;
+  opacity: .065;
+  transform: translateX(-50%) scale(.82);
+}
+.seaweed-mid span {
+  background: linear-gradient(90deg, #0A7469, #21A47D 54%, #8AD89B);
+}
+.aquatic-light-ribbon {
+  position: absolute;
+  top: 0;
+  width: 34vw;
+  height: 110vh;
+  opacity: .055;
+  pointer-events: none;
+  background: linear-gradient(104deg, transparent 10%, rgba(80,212,238,.65) 46%, transparent 78%);
+  filter: blur(10px);
+  transform-origin: top center;
+  animation: aquaticRibbonDrift 12s ease-in-out infinite alternate;
+}
+.ribbon-one { left: 8%; rotate: 7deg; }
+.ribbon-two { right: 5%; rotate: -10deg; animation-delay: -6s; }
+@keyframes aquaticRibbonDrift {
+  from { transform: translate3d(-6vw,-4vh,0) skewX(-4deg); opacity: .035; }
+  to { transform: translate3d(7vw,6vh,0) skewX(5deg); opacity: .08; }
+}
+
+/* Make the page background feel like clear water, not a flat white canvas. */
+body {
+  background:
+    radial-gradient(circle at 15% 24%, rgba(80,212,238,.07), transparent 23rem),
+    radial-gradient(circle at 85% 62%, rgba(33,164,125,.045), transparent 27rem),
+    linear-gradient(180deg, #F8FDFF 0%, #FFFFFF 38%, #F5FCFF 100%);
+  background-attachment: fixed;
+}
+
+@media (max-width: 767px) {
+  .seaweed-mid { display: none; }
+  .aquatic-light-ribbon { opacity: .025; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .premium-action-btn::after,
+  .aquatic-light-ribbon { animation: none !important; }
+  button:not(:disabled) { transform: none !important; }
+}
+.trust-explainer-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(145deg, rgba(255,255,255,.065), rgba(255,255,255,.018));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+}
+.trust-explainer-card::after {
+  content: '';
+  position: absolute;
+  left: -30%; right: -30%; bottom: -26px;
+  height: 40px;
+  background: radial-gradient(ellipse, rgba(80,212,238,.12), transparent 65%);
+  animation: trustGlowDrift 5s ease-in-out infinite alternate;
+}
+@keyframes trustGlowDrift { to { transform: translateX(18%); opacity: .7; } }
+@media (prefers-reduced-motion: reduce) { .trust-explainer-card::after { animation: none; } }
+
+
+/* =========================================================
+   Premium V2.4: reef home, dolphin and deeper aquarium motion
+   ========================================================= */
+.hero-reef-home {
+  position: absolute;
+  left: 52%;
+  bottom: -4px;
+  width: min(480px, 44vw);
+  height: 205px;
+  transform: translateX(-8%);
+  z-index: 3;
+  pointer-events: none;
+  opacity: .96;
+}
+.hero-reef-home .reef-rock {
+  position: absolute;
+  bottom: 0;
+  border-radius: 48% 52% 36% 40% / 44% 42% 58% 56%;
+  background: linear-gradient(180deg, rgba(116,94,74,.98), rgba(76,56,39,.98));
+  box-shadow: inset 0 10px 18px rgba(255,255,255,.08), inset 0 -14px 16px rgba(0,0,0,.24), 0 -12px 35px rgba(11,96,75,.18);
+}
+.reef-rock-one {
+  left: 0; width: 38%; height: 108px;
+  background: linear-gradient(180deg, rgba(169,115,75,.98), rgba(107,73,51,.98));
+}
+.reef-rock-two {
+  left: 20%; width: 34%; height: 132px; z-index: 2;
+  background: linear-gradient(180deg, rgba(132,102,188,.98), rgba(82,63,123,.98));
+}
+.reef-rock-three {
+  right: 14%; width: 31%; height: 122px;
+  background: linear-gradient(180deg, rgba(62,168,160,.98), rgba(37,113,115,.98));
+}
+.reef-rock-four {
+  right: 0; width: 26%; height: 92px;
+  background: linear-gradient(180deg, rgba(214,134,87,.98), rgba(132,81,54,.98));
+}
+.hero-reef-home .reef-pebble {
+  position: absolute;
+  bottom: 8px;
+  border-radius: 999px;
+  box-shadow: inset 0 4px 8px rgba(255,255,255,.18), inset 0 -4px 7px rgba(0,0,0,.18), 0 0 14px rgba(111,250,225,.1);
+  animation: pebbleTwinkle 5.8s ease-in-out infinite alternate;
+}
+.pebble-one { left: 8%; width: 28px; height: 22px; background: linear-gradient(180deg,#f6ba64,#cb7f45); }
+.pebble-two { left: 18%; width: 20px; height: 16px; background: linear-gradient(180deg,#60d4ff,#1487d7); animation-delay:-1.2s; }
+.pebble-three { left: 58%; width: 26px; height: 20px; background: linear-gradient(180deg,#88f0c4,#28ad7a); animation-delay:-2.8s; }
+.pebble-four { left: 66%; width: 22px; height: 18px; background: linear-gradient(180deg,#ff9ba4,#d6637e); animation-delay:-3.5s; }
+.pebble-five { right: 14%; width: 24px; height: 20px; background: linear-gradient(180deg,#8cb2ff,#5c73d6); animation-delay:-2s; }
+.pebble-six { right: 5%; width: 18px; height: 14px; background: linear-gradient(180deg,#ffe083,#dbab3e); animation-delay:-4.2s; }
+.hero-reef-home .reef-coral {
+  position:absolute;
+  bottom: 18px;
+  width: 22px;
+  height: 64px;
+  border-radius: 40% 60% 50% 50% / 48% 48% 52% 52%;
+  transform-origin: 50% 100%;
+  animation: coralSway 7s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 10px rgba(255,122,145,.2));
+}
+.hero-reef-home .reef-coral::before,
+.hero-reef-home .reef-coral::after {
+  content:'';
+  position:absolute;
+  width: 16px;
+  height: 48px;
+  border-radius: 50%;
+  background: inherit;
+  top: 8px;
+}
+.hero-reef-home .reef-coral::before { left: -10px; transform: rotate(-18deg); }
+.hero-reef-home .reef-coral::after { right: -10px; transform: rotate(18deg); }
+.coral-left { left: 12%; background: linear-gradient(180deg,#ff9f8d,#ff6f74); }
+.coral-right { right: 20%; height: 56px; background: linear-gradient(180deg,#f7d16c,#eb9c34); animation-delay:-2.5s; }
+.hero-reef-home .reef-glow {
+  position:absolute;
+  inset: auto 10% 4px 10%;
+  height: 26px;
+  border-radius:999px;
+  background: radial-gradient(ellipse at center, rgba(90,236,196,.35), rgba(80,212,238,.08) 50%, transparent 74%);
+  filter: blur(10px);
+}
+@keyframes pebbleTwinkle { from { transform: translateY(0) scale(1); opacity:.92; } to { transform: translateY(-2px) scale(1.04); opacity:1; } }
+@keyframes coralSway { from { transform: rotate(-4deg) translateY(0); } to { transform: rotate(4deg) translateY(-1px); } }
+.hero-reef-home .reef-rock::after {
+  content:'';
+  position:absolute;
+  inset: 15% 14% auto 16%;
+  height: 26%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(171,247,255,.18), transparent);
+  opacity:.65;
+}
+.hero-reef-home .reef-cave-opening {
+  position: absolute;
+  left: 34%;
+  bottom: 18px;
+  width: 105px;
+  height: 66px;
+  border-radius: 52% 48% 46% 54% / 58% 58% 42% 42%;
+  background: radial-gradient(circle at 50% 35%, rgba(8,22,29,.25), rgba(2,10,15,.92) 74%);
+  z-index: 3;
+  box-shadow: inset 0 0 20px rgba(0,0,0,.45);
+}
+.hero-reef-home .reef-plant {
+  position: absolute;
+  bottom: 26px;
+  width: 18px;
+  border-radius: 90% 10% 80% 14%;
+  background: linear-gradient(180deg, rgba(67,206,118,.95), rgba(11,129,93,.95));
+  transform-origin: 50% 100%;
+  animation: reefPlantSway 6.1s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 12px rgba(45,185,101,.22));
+}
+.reef-plant-one { left: 32%; height: 92px; rotate: -10deg; }
+.reef-plant-two { left: 41%; height: 118px; rotate: 6deg; animation-delay: -2s; }
+.reef-plant-three { right: 18%; height: 104px; rotate: 15deg; animation-delay: -3.5s; }
+@keyframes reefPlantSway { from { transform: translate3d(-1px,0,0) rotate(-4deg);} to { transform: translate3d(6px,-2px,0) rotate(4deg);} }
+.hero-dolphin-shadow {
+  position:absolute;
+  right: clamp(6%, 8vw, 14%);
+  top: 16%;
+  width: min(320px, 24vw);
+  z-index: 2;
+  opacity:.5;
+  filter: drop-shadow(0 12px 28px rgba(0,0,0,.18)) blur(.1px);
+  animation: heroDolphinFloat 16s ease-in-out infinite alternate;
+  pointer-events:none;
+}
+.hero-dolphin-shadow svg { width:100%; height:auto; }
+@keyframes heroDolphinFloat {
+  from { transform: translate3d(0,0,0) rotate(-6deg); }
+  to { transform: translate3d(-36px,22px,0) rotate(3deg); }
+}
+.decor-dolphin {
+  position:absolute;
+  width: 170px;
+  height:auto;
+  opacity:.08;
+  filter: drop-shadow(0 12px 22px rgba(16,78,104,.12));
+  animation: dolphinCruise 32s linear infinite;
+}
+.decor-dolphin-one { top: 22vh; right: -220px; }
+.decor-dolphin-two { top: 62vh; left: -200px; width: 138px; animation-duration: 38s; animation-direction: reverse; }
+@keyframes dolphinCruise {
+  0% { transform: translate3d(0,0,0) rotate(-4deg); }
+  50% { transform: translate3d(-55vw,5vh,0) rotate(2deg); }
+  100% { transform: translate3d(calc(-100vw - 320px),-2vh,0) rotate(-1deg); }
+}
+.reef-home {
+  position:absolute;
+  left:50%;
+  bottom:-18px;
+  width:min(380px, 34vw);
+  height:170px;
+  transform:translateX(-50%);
+  opacity:.13;
+}
+.reef-home .reef-rock {
+  position:absolute;
+  bottom:0;
+  border-radius: 45% 55% 40% 45% / 48% 42% 58% 52%;
+  background: linear-gradient(180deg, rgba(91,72,55,.95), rgba(58,42,30,.95));
+}
+.reef-home .rock-left { left:0; width:38%; height:88px; }
+.reef-home .rock-middle { left:26%; width:34%; height:112px; }
+.reef-home .rock-right { right:0; width:30%; height:96px; }
+.reef-home .reef-cave {
+  position:absolute;
+  left:38%;
+  bottom:16px;
+  width:74px;
+  height:44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 34%, rgba(0,0,0,.2), rgba(0,0,0,.92) 72%);
+}
+.reef-home .reef-grass span {
+  position:absolute;
+  bottom:14px;
+  width:12px;
+  border-radius:90% 10% 70% 18%;
+  background: linear-gradient(180deg, rgba(89,219,130,.95), rgba(11,136,101,.95));
+  transform-origin:50% 100%;
+  animation: reefPlantSway 6s ease-in-out infinite alternate;
+}
+.reef-home .grass-left span:nth-child(1){ left:24%; height:72px; }
+.reef-home .grass-left span:nth-child(2){ left:29%; height:88px; animation-delay:-2s; }
+.reef-home .grass-left span:nth-child(3){ left:34%; height:64px; animation-delay:-1s; }
+.reef-home .grass-left span:nth-child(4){ left:39%; height:82px; animation-delay:-3s; }
+.reef-home .grass-right span:nth-child(1){ right:22%; height:78px; }
+.reef-home .grass-right span:nth-child(2){ right:27%; height:94px; animation-delay:-2.6s; }
+.reef-home .grass-right span:nth-child(3){ right:32%; height:68px; animation-delay:-1.4s; }
+.reef-home .grass-right span:nth-child(4){ right:37%; height:84px; animation-delay:-3.4s; }
+.reef-home .reef-bubble {
+  position:absolute;
+  bottom: 34px;
+  width:6px; height:6px;
+  border-radius:999px;
+  border:1px solid rgba(145,236,255,.36);
+  background: rgba(255,255,255,.32);
+  animation: bubbleRiseGlobal 9s linear infinite;
+}
+.reef-home .bubble-a { left:44%; animation-delay:-1s; }
+.reef-home .bubble-b { left:48%; width:4px; height:4px; animation-delay:-4s; }
+.reef-home .bubble-c { left:53%; width:8px; height:8px; animation-delay:-2s; }
+
+.hero-aquarium-stage::after {
+  content:'';
+  position:absolute;
+  inset:auto 0 0;
+  height: 180px;
+  background: linear-gradient(to top, rgba(7,63,51,.54), rgba(5,39,46,.18) 50%, transparent 100%);
+  pointer-events:none;
+  z-index:1;
+}
+
+@media (hover:hover) and (prefers-reduced-motion:no-preference) {
+  .premium-action-btn:hover {
+    box-shadow: 0 12px 30px rgba(8,117,181,.16), 0 0 0 1px rgba(80,212,238,.16);
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-dolphin-shadow { width: 150px; top: 11%; right: 4%; opacity: .36; }
+  .hero-reef-home { width: 72vw; height: 150px; left: 50%; transform: translateX(-50%); opacity:.92; }
+  .hero-reef-home .reef-cave-opening { width: 84px; height: 54px; left: 37%; }
+  .hero-reef-home .reef-coral { width: 16px; height: 44px; bottom: 14px; }
+  .hero-reef-home .reef-pebble { transform: scale(.86); }
+  .reef-home { width: 55vw; opacity: .08; }
+  .decor-dolphin { width: 110px; opacity: .05; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-dolphin-shadow,
+  .decor-dolphin,
+  .hero-reef-home .reef-plant,
+  .reef-home .reef-grass span {
+    animation: none !important;
+  }
+}
+/* Lightweight, local aquarium artwork used instead of unrelated stock photography. */
+.aquatic-visual{position:absolute;inset:0;overflow:hidden;background:#022b43}
+.aquatic-scene-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;transform:scale(1.015);animation:aquaSceneDrift 16s ease-in-out infinite alternate}
+.aquatic-scene-shade{position:absolute;inset:0;z-index:3;background:linear-gradient(100deg,rgba(1,20,34,.86) 0%,rgba(2,32,50,.58) 42%,rgba(2,31,48,.12) 72%,rgba(1,20,34,.08));pointer-events:none}
+.aquatic-light{position:absolute;top:-20%;width:22%;height:105%;background:linear-gradient(to bottom,rgba(128,232,255,.2),transparent);filter:blur(12px);transform:rotate(16deg);animation:aquaLight 7s ease-in-out infinite alternate}.aquatic-light-one{right:16%}.aquatic-light-two{right:42%;animation-delay:-3s}
+.aquatic-bubble{position:absolute;border:1px solid rgba(187,242,255,.65);border-radius:999px;z-index:2;animation:aquaBubble 7s linear infinite}.bubble-one{width:13px;height:13px;right:14%;bottom:-20px}.bubble-two{width:8px;height:8px;right:30%;bottom:-30px;animation-delay:-3s}.bubble-three{width:18px;height:18px;right:47%;bottom:-25px;animation-delay:-5s}.bubble-four{width:6px;height:6px;right:6%;bottom:-18px;animation-delay:-1s}
+.aquatic-subject{position:absolute;right:8%;top:21%;z-index:2;width:min(30vw,350px);height:min(30vw,350px);border-radius:45% 55% 50% 48%;display:grid;place-items:center;color:#66e4fb;background:radial-gradient(circle at 38% 35%,rgba(128,232,255,.22),rgba(10,104,144,.2) 50%,rgba(2,37,57,.38));border:1px solid rgba(128,232,255,.18);box-shadow:0 28px 80px rgba(0,0,0,.25);animation:aquaFloat 5s ease-in-out infinite}.aquatic-subject>svg{width:58%;height:58%;stroke-width:1.1;filter:drop-shadow(0 12px 18px rgba(1,20,35,.45))}.aquatic-subject-food{border-radius:30%;color:#79f2c0}.aquatic-subject-combo{color:#d7b8ff}.aquatic-subject-food>svg{width:36%;transform:translateX(-24%)}
+.food-jar{position:absolute;right:20%;bottom:18%;width:32%;height:36%;border-radius:14px;background:linear-gradient(160deg,#fff,#a9eff6);color:#0875b5;display:grid;place-items:center;transform:rotate(7deg);box-shadow:0 12px 30px rgba(0,0,0,.25)}.food-jar svg{width:60%}.food-pellets{position:absolute;right:8%;top:17%;color:#ffd166;letter-spacing:7px;transform:rotate(28deg);font-size:24px}.combo-fish{position:absolute;right:8%;bottom:11%;width:38%;color:#68e7fa}.combo-fish svg{width:100%;height:auto}
+.aquatic-plant{position:absolute;bottom:5%;z-index:2;width:70px;height:42%;transform-origin:bottom;animation:aquaSway 4s ease-in-out infinite alternate}.plant-one{right:3%}.plant-two{right:44%;height:30%;animation-delay:-2s}.aquatic-plant i{position:absolute;bottom:0;width:17px;height:100%;border-radius:100% 0;background:linear-gradient(#26d39a,#087f70);transform-origin:bottom}.aquatic-plant i:nth-child(1){left:24px;transform:rotate(-8deg)}.aquatic-plant i:nth-child(2){left:7px;height:72%;transform:rotate(-24deg)}.aquatic-plant i:nth-child(3){left:42px;height:82%;transform:rotate(21deg)}
+.aquatic-floor{position:absolute;inset:auto 0 0;height:14%;z-index:3;background:linear-gradient(to top,#031c28,transparent)}.aquatic-floor span{position:absolute;bottom:10%;width:38px;height:22px;border-radius:50%;background:#315667;box-shadow:inset 4px 3px 0 rgba(255,255,255,.08)}.aquatic-floor span:nth-child(1){right:7%}.aquatic-floor span:nth-child(2){right:21%;width:55px;background:#6b5166}.aquatic-floor span:nth-child(3){right:35%;background:#9a724f}.aquatic-floor span:nth-child(4){right:48%;width:25px;background:#4d7771}
+@keyframes aquaBubble{to{transform:translate(-20px,-650px);opacity:0}}@keyframes aquaLight{to{opacity:.45;transform:rotate(10deg) translateX(30px)}}@keyframes aquaSceneDrift{to{transform:scale(1.045) translateX(-.6%)}}
+@media(max-width:700px){.aquatic-scene-image{object-position:62% center}.aquatic-scene-shade{background:linear-gradient(100deg,rgba(1,20,34,.88),rgba(2,32,50,.58) 65%,rgba(1,20,34,.12))}}
+@media(prefers-reduced-motion:reduce){.aquatic-light,.aquatic-bubble,.aquatic-scene-image{animation:none}}
+.footer-water-glow{background:radial-gradient(circle at 15% 25%,rgba(8,117,181,.28),transparent 28%),radial-gradient(circle at 85% 60%,rgba(31,203,190,.12),transparent 25%)}
+.footer-bubble{animation:footerBubble 7s ease-in-out infinite}.footer-bubble-delay{animation-delay:-3s}.footer-fish{animation:footerFish 3.5s ease-in-out infinite}
+@keyframes footerBubble{50%{transform:translateY(-18px) scale(1.05);opacity:.4}}@keyframes footerFish{50%{transform:translateX(4px) rotate(3deg)}}
+@media(prefers-reduced-motion:reduce){.footer-bubble,.footer-fish{animation:none}}
+
+
+/* Premium mobile ergonomics: safe-area spacing, smooth taps and stable media. */
+html { -webkit-text-size-adjust: 100%; }
+body { overflow-x: clip; }
+img { max-width: 100%; }
+button, a, [role="button"] { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+input, select, textarea { font-size: max(16px, 1em); }
+@supports (padding: env(safe-area-inset-bottom)) {
+  .pb-safe { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
+  .mobile-nav-safe { padding-bottom: max(.5rem, env(safe-area-inset-bottom)); }
+}
+@media (max-width: 640px) {
+  #home-page-container { gap: 2.25rem; }
+  button, [role="button"] { min-height: 42px; }
+  .premium-action-btn { min-height: 46px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}

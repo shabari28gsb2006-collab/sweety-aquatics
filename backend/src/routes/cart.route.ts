@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import { requireAuth, requireCustomer } from '../middleware/auth.middleware.js';
+import { requireTrustedOrigin } from '../middleware/origin.middleware.js';
+import { getCartController, addCartItemController, updateCartItemController, removeCartItemController, clearCartController } from '../controllers/cart.controller.js';
+export const cartRouter = Router();
+cartRouter.use(requireAuth, requireCustomer);
+cartRouter.get('/', getCartController);
+cartRouter.post('/items', requireTrustedOrigin, addCartItemController);
+cartRouter.patch('/items/:productId', requireTrustedOrigin, updateCartItemController);
+cartRouter.delete('/items/:productId', requireTrustedOrigin, removeCartItemController);
+cartRouter.delete('/', requireTrustedOrigin, clearCartController);

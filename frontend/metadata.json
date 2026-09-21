@@ -1,0 +1,6 @@
+{
+  "name": "Sweety Birds & Fishes",
+  "description": "Premium aquatic ecommerce store specializing in vibrant guppies, high-nutrition fish food, and combo packs with live aquarium simulation and seamless ordering.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

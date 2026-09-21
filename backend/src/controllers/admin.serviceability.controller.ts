@@ -1,0 +1,10 @@
+import type { Request,Response,NextFunction } from 'express';
+import { z } from 'zod';
+import { prisma } from '../config/prisma.js';
+import { AppError } from '../middleware/errorHandler.js';
+import { ok } from '../utils/apiResponse.js';
+const schema=z.object({pincode:z.string().regex(/^\d{6}$/),area:z.string().trim().max(120).optional().nullable(),city:z.string().trim().max(100).optional().nullable(),district:z.string().trim().min(2).max(100),state:z.literal('Tamil Nadu').default('Tamil Nadu'),courierName:z.string().trim().max(100).optional().nullable(),isActive:z.boolean().default(true),estimatedDeliveryDays:z.coerce.number().int().min(1).max(30).optional().nullable(),notes:z.string().trim().max(500).optional().nullable()});
+export async function listAdminPincodes(req:Request,res:Response,next:NextFunction){try{return ok(res,await prisma.serviceablePincode.findMany({orderBy:[{district:'asc'},{pincode:'asc'}]}),'Serviceable PIN codes');}catch(e){next(e);}}
+export async function createAdminPincode(req:Request,res:Response,next:NextFunction){try{const body=schema.parse(req.body);const exists=await prisma.serviceablePincode.findUnique({where:{pincode:body.pincode}});if(exists) throw new AppError(409,'PIN code already exists');return ok(res,await prisma.serviceablePincode.create({data:body}),'PIN code added',201);}catch(e){next(e);}}
+export async function updateAdminPincode(req:Request,res:Response,next:NextFunction){try{const body=schema.parse(req.body);const row=await prisma.serviceablePincode.findUnique({where:{id:req.params.id}});if(!row) throw new AppError(404,'PIN code entry not found');return ok(res,await prisma.serviceablePincode.update({where:{id:row.id},data:body}),'PIN code updated');}catch(e){next(e);}}
+export async function deleteAdminPincode(req:Request,res:Response,next:NextFunction){try{const row=await prisma.serviceablePincode.findUnique({where:{id:req.params.id}});if(!row) throw new AppError(404,'PIN code entry not found');await prisma.serviceablePincode.delete({where:{id:row.id}});return ok(res,{},'PIN code removed');}catch(e){next(e);}}

@@ -1,0 +1,185 @@
+[
+  {
+    "id": "art-01",
+    "slug": "guppy-breeding-tips",
+    "title": "Guppy Breeding Tips: A Practical Beginner Guide",
+    "subtitle": "Healthy breeding fish, safe cover for fry, and simple early-care habits.",
+    "category": "Breeding",
+    "readTime": "5 min read",
+    "bannerImage": "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=1200&q=80",
+    "summary": "A simple starting point for guppy breeding: choose active fish, provide enough space and cover, keep water conditions stable, and feed fry in small appropriate portions.",
+    "content": [
+      {
+        "heading": "1. Choose Active, Healthy Fish",
+        "body": [
+          "Select fish that are alert, swimming normally and free from obvious injury. Avoid breeding fish that appear weak or are being heavily chased.",
+          "Provide enough space and hiding areas so females can move away from persistent males. Observe the group and adjust the number of fish if chasing becomes excessive."
+        ],
+        "tips": [
+          "If you add new fish, keep them separate for observation before mixing them with an established group."
+        ]
+      },
+      {
+        "heading": "2. Give Fry Safe Cover",
+        "body": [
+          "Adult guppies may eat newborn fry. Dense fine-leaved plants or a separate nursery area can give fry places to hide.",
+          "Keep the nursery environment stable and avoid sudden changes in temperature or water quality."
+        ]
+      },
+      {
+        "heading": "3. Feed Fry Small Portions",
+        "body": [
+          "Use food that is small enough for fry to eat. Feed modest portions and remove or reduce excess food so the water does not foul.",
+          "As fry grow, gradually move to appropriately sized food and continue observing their activity and water quality."
+        ]
+      }
+    ],
+    "publishedAt": "2026-09-15"
+  },
+  {
+    "id": "art-02",
+    "slug": "summer-guppy-maintenance",
+    "title": "Summer Guppy Maintenance in Tamil Nadu",
+    "subtitle": "Temperature, oxygen, shade, evaporation and feeding checks for hot weather.",
+    "category": "Seasonal",
+    "readTime": "5 min read",
+    "bannerImage": "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1200&q=80",
+    "summary": "Hot weather can warm aquarium water quickly. Monitor temperature, maintain surface movement, keep tanks away from direct sun and watch water level and feeding closely.",
+    "content": [
+      {
+        "heading": "1. Watch Temperature and Surface Movement",
+        "body": [
+          "Warm water generally holds less dissolved oxygen than cooler water. Keep good surface movement and observe fish for unusual breathing or inactivity.",
+          "An air stone or sponge filter can improve surface agitation when needed, provided the flow is not too strong for the fish."
+        ],
+        "tips": [
+          "Use a reliable aquarium thermometer so changes are noticed early instead of guessing from room temperature."
+        ]
+      },
+      {
+        "heading": "2. Reduce Direct Heat",
+        "body": [
+          "Keep the aquarium away from direct afternoon sunlight and other heat sources.",
+          "A suitable aquarium fan can help with evaporative cooling, but evaporation also changes water level, so top up appropriately and keep checking temperature.",
+          "Avoid sudden cooling methods such as adding large amounts of ice directly to the aquarium."
+        ]
+      },
+      {
+        "heading": "3. Feed Carefully in Hot Weather",
+        "body": [
+          "Offer only what the fish can finish in a short time. Extra uneaten food can worsen water quality faster in warm conditions."
+        ]
+      }
+    ],
+    "publishedAt": "2026-09-15"
+  },
+  {
+    "id": "art-03",
+    "slug": "winter-guppy-maintenance",
+    "title": "Rainy Season & Winter Guppy Maintenance",
+    "subtitle": "Keep temperature and water changes stable during cooler nights and rainy weather.",
+    "category": "Seasonal",
+    "readTime": "4 min read",
+    "bannerImage": "https://images.unsplash.com/photo-1535591273668-578e31182c4f?auto=format&fit=crop&w=1200&q=80",
+    "summary": "Cooler nights and rain can change room and aquarium temperatures. The goal is stability: measure the water temperature, avoid sudden changes and use suitable heating only when needed.",
+    "content": [
+      {
+        "heading": "1. Keep Temperature Stable",
+        "body": [
+          "Use an aquarium thermometer and watch for large day-to-night changes. Guppies generally do better with stable tropical temperatures than repeated sudden swings.",
+          "If your aquarium becomes too cool for the fish, use a correctly sized thermostatic aquarium heater and follow the manufacturer instructions."
+        ]
+      },
+      {
+        "heading": "2. Match Water During Changes",
+        "body": [
+          "During water changes, avoid adding replacement water that is dramatically colder or warmer than the aquarium. Make changes gradually and use dechlorinated water appropriate for your setup."
+        ]
+      }
+    ],
+    "publishedAt": "2026-09-15"
+  },
+  {
+    "id": "art-04",
+    "slug": "beginner-guppy-care",
+    "title": "Beginner Guppy Care: A Simple Foundation",
+    "subtitle": "Space, filtration, water quality, observation and a consistent routine.",
+    "category": "Beginner",
+    "readTime": "5 min read",
+    "bannerImage": "https://images.unsplash.com/photo-1524704654690-b56c05c78a00?auto=format&fit=crop&w=1200&q=80",
+    "summary": "Start with a properly prepared aquarium rather than a tiny bowl. Give guppies stable water, gentle filtration, suitable space and a regular observation routine.",
+    "content": [
+      {
+        "heading": "1. Choose a Stable Aquarium",
+        "body": [
+          "Larger, properly filtered aquariums are generally easier to keep stable than very small bowls. Choose a tank size that provides swimming room for the number of fish you plan to keep."
+        ]
+      },
+      {
+        "heading": "2. Use Gentle Filtration",
+        "body": [
+          "Use filtration that keeps the water moving and supports biological filtration without creating an excessively strong current. Sponge filters are a common gentle option for guppy setups."
+        ]
+      },
+      {
+        "heading": "3. Observe Every Day",
+        "body": [
+          "Take a few quiet minutes each day to check swimming, appetite, water temperature and equipment. Early observation helps you notice changes before they become larger problems."
+        ]
+      }
+    ],
+    "publishedAt": "2026-09-15"
+  },
+  {
+    "id": "art-05",
+    "slug": "feeding-guide",
+    "title": "Guppy Feeding Guide: Small Portions, Consistent Routine",
+    "subtitle": "How to avoid overfeeding and use product directions responsibly.",
+    "category": "Nutrition",
+    "readTime": "3 min read",
+    "bannerImage": "https://images.unsplash.com/photo-1563178406-4cdc2923acbc?auto=format&fit=crop&w=1200&q=80",
+    "summary": "Feed modest portions that the fish can finish, follow the food label, vary the diet when appropriate and keep uneaten food from building up in the aquarium.",
+    "content": [
+      {
+        "heading": "1. Start With Small Portions",
+        "body": [
+          "Overfeeding can leave waste in the aquarium. Start with a small amount, watch how quickly it is eaten and adjust the next feeding rather than adding a large amount at once."
+        ]
+      },
+      {
+        "heading": "2. Read the Product Label",
+        "body": [
+          "Different fish foods have different ingredients and feeding directions. Check the seller listing and manufacturer label instead of assuming every product should be used the same way."
+        ]
+      }
+    ],
+    "publishedAt": "2026-09-15"
+  },
+  {
+    "id": "art-06",
+    "slug": "acclimation-guide",
+    "title": "Acclimation Guide for Newly Arrived Guppies",
+    "subtitle": "A calm transition from the transport bag to the aquarium.",
+    "category": "Acclimation",
+    "readTime": "4 min read",
+    "bannerImage": "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=1200&q=80",
+    "summary": "Prepare the aquarium before the fish arrive, keep the lights low, avoid sudden temperature changes and follow the seller instructions for the specific shipment.",
+    "content": [
+      {
+        "heading": "1. Prepare Before Opening the Bag",
+        "body": [
+          "Make sure the aquarium is ready before opening the transport bag. Keep lighting low and compare the bag and aquarium temperatures.",
+          "If the seller instructs you to float the sealed bag for temperature adjustment, keep the bag sealed during that step and avoid leaving the fish in transport water longer than necessary."
+        ]
+      },
+      {
+        "heading": "2. Transfer Gently",
+        "body": [
+          "Follow the seller guidance for gradual acclimation when water conditions differ. Avoid sudden changes.",
+          "When transferring the fish, use a clean net or appropriate container and avoid adding transport water to the main aquarium when possible."
+        ]
+      }
+    ],
+    "publishedAt": "2026-09-15"
+  }
+]

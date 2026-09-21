@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import { requireAuth,requireAdmin } from '../middleware/auth.middleware.js';
+import { requireTrustedOrigin } from '../middleware/origin.middleware.js';
+import { listAdminPincodes,createAdminPincode,updateAdminPincode,deleteAdminPincode } from '../controllers/admin.serviceability.controller.js';
+export const adminServiceabilityRouter=Router();
+adminServiceabilityRouter.use(requireAuth,requireAdmin);
+adminServiceabilityRouter.get('/',listAdminPincodes);
+adminServiceabilityRouter.post('/',requireTrustedOrigin,createAdminPincode);
+adminServiceabilityRouter.put('/:id',requireTrustedOrigin,updateAdminPincode);
+adminServiceabilityRouter.delete('/:id',requireTrustedOrigin,deleteAdminPincode);

@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { requireAdmin, requireAuth } from '../middleware/auth.middleware.js';
+import { requireTrustedOrigin } from '../middleware/origin.middleware.js';
+import { archiveProduct, bulkProducts, createProduct, duplicateProduct, getSellerProducts, updateProduct, uploadProductImage } from '../controllers/product.controller.js';
+export const adminProductRouter = Router();
+adminProductRouter.use(requireAuth, requireAdmin, requireTrustedOrigin);
+adminProductRouter.get('/', getSellerProducts);
+adminProductRouter.post('/', createProduct);
+adminProductRouter.post('/images', uploadProductImage);
+adminProductRouter.patch('/bulk', bulkProducts);
+adminProductRouter.put('/:id', updateProduct);
+adminProductRouter.post('/:id/duplicate', duplicateProduct);
+adminProductRouter.delete('/:id', archiveProduct);
