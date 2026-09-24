@@ -294,9 +294,7 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
     if (container) {
       container.addEventListener('mousemove', handleMouseMove, { passive: true });
       container.addEventListener('mouseleave', handleMouseLeave);
-      container.addEventListener('touchstart', handleTouchStart, { passive: true });
-      container.addEventListener('touchmove', handleTouchMove, { passive: true });
-      container.addEventListener('touchend', handleTouchEnd, { passive: true });
+      // Touch input intentionally does not steer fish; mobile fish wander autonomously.
     }
 
     // ==========================================
@@ -585,7 +583,7 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
       });
 
       const pointerAge = currentTime - primaryFish.lastPointerTime;
-      const schoolFollowing = primaryFish.hasPointerTarget && pointerAge < (isMobile ? 2200 : 4000);
+      const schoolFollowing = !isMobile && primaryFish.hasPointerTarget && pointerAge < 4000;
 
       // 4. SECONDARY GUPPIES form a gentle school around cursor or finger.
       secondaryFishes.forEach((fish) => {
@@ -602,7 +600,7 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
           if (schoolSpeed > cap) { fish.vx = fish.vx / schoolSpeed * cap; fish.vy = fish.vy / schoolSpeed * cap; }
         } else {
           fish.vy += (Math.sin(tick * 0.025 + fish.x * 0.008) * 0.45 - fish.vy) * 0.08;
-          const cruise = fish.facing * (1.25 + fish.depth * 0.72);
+          const cruise = fish.facing * (1.8 + fish.depth * 1.0);
           fish.vx += (cruise - fish.vx) * 0.025;
         }
         fish.x += fish.vx * motionSpeedFactor;
@@ -642,7 +640,7 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
       let desiredTargetY = primaryFish.y;
 
       const timeSincePointer = currentTime - primaryFish.lastPointerTime;
-      const isPointerActive = primaryFish.hasPointerTarget && timeSincePointer < 4000;
+      const isPointerActive = !isMobile && primaryFish.hasPointerTarget && timeSincePointer < 4000;
 
       if (isPointerActive) {
         // -------------------------------------------------------------
@@ -709,7 +707,7 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
       primaryFish.vy *= drag;
 
       // Speed cap
-      const maxSpeed = prefersReducedMotion ? 2.0 : isMobile ? 4.8 : 7.0;
+      const maxSpeed = prefersReducedMotion ? 2.0 : isMobile ? 6.2 : 8.5;
       const currentSpeed = Math.hypot(primaryFish.vx, primaryFish.vy);
       if (currentSpeed > maxSpeed) {
         primaryFish.vx = (primaryFish.vx / currentSpeed) * maxSpeed;
@@ -805,9 +803,7 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
       if (container) {
         container.removeEventListener('mousemove', handleMouseMove);
         container.removeEventListener('mouseleave', handleMouseLeave);
-        container.removeEventListener('touchstart', handleTouchStart);
-        container.removeEventListener('touchmove', handleTouchMove);
-        container.removeEventListener('touchend', handleTouchEnd);
+
       }
       cancelAnimationFrame(animationFrameId);
     };

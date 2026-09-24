@@ -247,3 +247,17 @@ export function getArrivalCareGuide(_req: Request, res: Response) {
 
 export async function listCareArticles(_req: Request, res: Response, next: NextFunction) { try { return ok(res, await prisma.careArticle.findMany({ where: { isPublished: true }, orderBy: { publishedAt: 'desc' } })); } catch (error) { next(error); } }
 export async function getCareArticle(req: Request, res: Response, next: NextFunction) { try { const article = await prisma.careArticle.findFirst({ where: { slug: req.params.slug, isPublished: true } }); if (!article) throw new AppError(404, 'Care article not found'); return ok(res, article); } catch (error) { next(error); } }
+
+
+const careArticleImageInput = z.object({ bannerImage: z.string().trim().url().max(2048) });
+export async function listAdminCareArticles(_req: Request, res: Response, next: NextFunction) {
+  try { return ok(res, await prisma.careArticle.findMany({ orderBy: { publishedAt: 'desc' } })); }
+  catch (error) { next(error); }
+}
+export async function updateCareArticleImage(req: Request, res: Response, next: NextFunction) {
+  try {
+    const input = careArticleImageInput.parse(req.body);
+    const article = await prisma.careArticle.update({ where: { id: req.params.id }, data: { bannerImage: input.bannerImage } });
+    return ok(res, article, 'Care guide image saved');
+  } catch (error) { next(error); }
+}

@@ -9,6 +9,7 @@ import { AdminPincodes } from './AdminPincodes';
 import { AdminReviews } from './AdminReviews';
 import { AdminAnalytics } from './AdminAnalytics';
 import { AdminSettings } from './AdminSettings';
+import { AdminCareGuideImages } from './AdminCareGuideImages';
 import { AdminSupport } from './AdminSupport';
 import { AdminPayments } from './AdminPayments';
 import { ProductFormModal } from './ProductFormModal';
@@ -23,6 +24,7 @@ import {
   ShieldCheck,
   Fish,
   Settings,
+  Image as ImageIcon,
   MessageSquare,
   CreditCard,
   LogOut,
@@ -94,6 +96,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ onNavigateToStore, onL
     { id: 'support', label: 'Support', icon: MessageSquare },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'settings', label: 'Contact Settings', icon: Settings },
+    { id: 'care-images', label: 'Care Guide Images', icon: ImageIcon },
   ];
 
   return (
@@ -192,6 +195,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ onNavigateToStore, onL
         {activeTab === 'analytics' && <AdminAnalytics />}
 
         {activeTab === 'settings' && <AdminSettings />}
+        {activeTab === 'care-images' && <AdminCareGuideImages />}
       </main>
 
       {/* Product Add/Edit Modal */}

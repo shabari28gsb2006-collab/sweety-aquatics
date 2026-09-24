@@ -28,6 +28,8 @@ customerExperienceRouter.post('/support-tickets', requireTrustedOrigin, c.create
 
 export const adminCustomerExperienceRouter = Router();
 adminCustomerExperienceRouter.use(requireAuth, requireAdmin);
+adminCustomerExperienceRouter.get('/care-articles', c.listAdminCareArticles);
+adminCustomerExperienceRouter.patch('/care-articles/:id/image', requireTrustedOrigin, c.updateCareArticleImage);
 adminCustomerExperienceRouter.put('/contact-settings', requireTrustedOrigin, c.updateContactSettings);
 adminCustomerExperienceRouter.get('/availability-alerts/counts', c.availabilityAlertCounts);
 adminCustomerExperienceRouter.get('/support-tickets', c.listAdminTickets);

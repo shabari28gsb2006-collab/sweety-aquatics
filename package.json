@@ -1,0 +1,10 @@
+{
+  "name": "sweety-aquatics-vercel",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend && npm run prisma:generate --prefix backend",
+    "build": "npm run build --prefix backend && npm run build --prefix frontend",
+    "vercel-build": "npm run prisma:generate --prefix backend && npm run build --prefix backend && npm run build --prefix frontend"
+  }
+}
