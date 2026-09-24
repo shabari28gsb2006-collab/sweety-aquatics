@@ -1,7 +1,7 @@
 import { CartItem, Product, ProductCategory } from '../types';
 import { authService } from './authService';
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api').replace(/\/$/, '');
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:4000/api' : '/api')).replace(/\/$/, '');
 type CartListener = (items: CartItem[]) => void;
 type Envelope<T> = { success: boolean; message?: string; data?: T };
 

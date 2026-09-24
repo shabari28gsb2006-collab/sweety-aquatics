@@ -1,7 +1,7 @@
 import React,{useCallback,useEffect,useRef,useState} from 'react';
 import {AlertCircle,CheckCircle2,Clock3,ExternalLink,FileImage,Loader2,LogIn,RefreshCw,XCircle} from 'lucide-react';
 import {toastService} from '../../services/toastService';
-const API=(import.meta.env.VITE_API_BASE_URL||'http://localhost:4000/api').replace(/\/$/,'');
+const API=(import.meta.env.VITE_API_BASE_URL||(import.meta.env.DEV?'http://localhost:4000/api':'/api')).replace(/\/$/,'');
 class AdminSessionError extends Error{}
 async function api(path:string,init:RequestInit={},retry=true):Promise<any>{const res=await fetch(`${API}${path}`,{...init,credentials:'include',headers:{'Content-Type':'application/json',...(init.headers||{})}});const body=await res.json().catch(()=>({}));if((res.status===401||res.status===403)&&retry){const refresh=await fetch(`${API}/auth/admin/refresh`,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:'{}'});if(refresh.ok)return api(path,init,false);throw new AdminSessionError('Your seller session expired. Sign in again.');}if(res.status===401||res.status===403)throw new AdminSessionError(body.message||'Seller administrator access required');if(!res.ok||!body.success)throw new Error(body.message||'Request failed');return body.data;}
 export const AdminPayments:React.FC=()=>{const[rows,setRows]=useState<any[]>([]);const[audit,setAudit]=useState(false);const[loading,setLoading]=useState(true);const[sessionExpired,setSessionExpired]=useState(false);const[updating,setUpdating]=useState<string|null>(null);const running=useRef(false);

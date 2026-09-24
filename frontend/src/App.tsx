@@ -97,7 +97,7 @@ export default function App() {
   useEffect(() => {
     let active = true;
     const verifyAdminSession = async () => {
-      const base = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api').replace(/\/$/, '');
+      const base = (import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:4000/api' : '/api')).replace(/\/$/, '');
       const requestMe = () => fetch(`${base}/auth/admin/me`, { credentials: 'include' });
       try {
         let response = await requestMe();

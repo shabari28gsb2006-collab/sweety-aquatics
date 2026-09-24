@@ -52,7 +52,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ onNavigateToStore, onL
   }, []);
 
   useEffect(() => {
-    const API=(import.meta.env.VITE_API_BASE_URL||'http://localhost:4000/api').replace(/\/$/,'');
+    const API=(import.meta.env.VITE_API_BASE_URL||(import.meta.env.DEV?'http://localhost:4000/api':'/api')).replace(/\/$/,'');
     let stopped=false;
     const poll=async()=>{if(stopped||document.visibilityState!=='visible')return;try{let res=await fetch(`${API}/payments/admin/notifications`,{credentials:'include'});if(res.status===401){const refreshed=await fetch(`${API}/auth/admin/refresh`,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:'{}'});if(refreshed.ok)res=await fetch(`${API}/payments/admin/notifications`,{credentials:'include'});}if(res.status===401||res.status===403){stopped=true;return;}const body=await res.json();if(res.ok&&body.success)setUnreadPayments(body.data.filter((item:any)=>!item.isRead).length);}catch{/* retry later */}};
     void poll();const timer=window.setInterval(()=>void poll(),5000);return()=>{stopped=true;window.clearInterval(timer)};
@@ -64,7 +64,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ onNavigateToStore, onL
   };
 
   const handleLogout = async () => {
-    const API = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api').replace(/\/$/, '');
+    const API = (import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:4000/api' : '/api')).replace(/\/$/, '');
     try {
       await fetch(`${API}/auth/admin/logout`, {
         method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: '{}',

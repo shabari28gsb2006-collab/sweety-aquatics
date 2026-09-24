@@ -867,3 +867,6 @@ input, select, textarea { font-size: max(16px, 1em); }
 /* Keep the bottom tabs clear of Android/iOS gesture bars and page content. */
 .mobile-nav-safe { padding-bottom: max(.45rem, env(safe-area-inset-bottom)); }
 main { padding-bottom: env(safe-area-inset-bottom); }
+
+/* Smooth in-page navigation; reduced-motion preference remains respected below. */
+html { scroll-behavior: smooth; }

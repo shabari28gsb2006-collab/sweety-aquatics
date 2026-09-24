@@ -1,6 +1,6 @@
 import { Product } from '../types';
 import { authService } from './authService';
-const API_BASE_URL=(import.meta.env.VITE_API_BASE_URL||'http://localhost:4000/api').replace(/\/$/,'');
+const API_BASE_URL=(import.meta.env.VITE_API_BASE_URL||(import.meta.env.DEV?'http://localhost:4000/api':'/api')).replace(/\/$/,'');
 type WishlistListener=(productIds:string[])=>void; type Envelope<T>={success:boolean;message?:string;data?:T};
 async function request<T>(path:string,init:RequestInit={}):Promise<T>{const r=await fetch(`${API_BASE_URL}${path}`,{...init,credentials:'include',headers:{'Content-Type':'application/json',...(init.headers||{})}});const p=await r.json().catch(()=>({})) as Envelope<T>;if(!r.ok||!p.success)throw new Error(p.message||'Wishlist request failed');return p.data as T;}
 class WishlistService{

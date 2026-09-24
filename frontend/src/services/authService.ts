@@ -1,7 +1,7 @@
 import { User, Address } from '../types';
 
 type AuthListener = (user: User | null) => void;
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api').replace(/\/$/, '');
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:4000/api' : '/api')).replace(/\/$/, '');
 
 type BackendAddress = {
   id: string; fullName: string; mobile: string; line1: string; line2?: string | null; area?: string | null;

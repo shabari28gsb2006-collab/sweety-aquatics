@@ -1,7 +1,7 @@
 import { Product, ProductCategory, ProductStatus } from "../types";
 
 const API = (
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:4000/api"
+  import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? "http://localhost:4000/api" : "/api")
 ).replace(/\/$/, "");
 type Listener = (products: Product[]) => void;
 type Envelope<T> = { success: boolean; message?: string; data?: T };

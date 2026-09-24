@@ -242,7 +242,6 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
     // POINTER & TOUCH LISTENERS
     // ==========================================
     const handleMouseMove = (e: MouseEvent) => {
-      if (isMobile || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
       const rect = canvas.getBoundingClientRect();
       const clientX = e.clientX - rect.left;
       const clientY = e.clientY - rect.top;
@@ -280,7 +279,10 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
           lastTouchRipple = performance.now();
         }
 
-        // Touch never steers the fish; autonomous swimming remains active on mobile.
+        primaryFish.pointerX = tx;
+        primaryFish.pointerY = ty;
+        primaryFish.hasPointerTarget = true;
+        primaryFish.lastPointerTime = performance.now();
 
       }
     };
@@ -596,11 +598,11 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
           fish.vx += (targetX - fish.x) * (isMobile ? 0.0028 : 0.0022) * motionSpeedFactor;
           fish.vy += (targetY - fish.y) * (isMobile ? 0.0028 : 0.0022) * motionSpeedFactor;
           const schoolSpeed = Math.hypot(fish.vx, fish.vy);
-          const cap = isMobile ? 2.4 : 2.8;
+          const cap = isMobile ? 3.2 : 3.7;
           if (schoolSpeed > cap) { fish.vx = fish.vx / schoolSpeed * cap; fish.vy = fish.vy / schoolSpeed * cap; }
         } else {
           fish.vy += (Math.sin(tick * 0.025 + fish.x * 0.008) * 0.45 - fish.vy) * 0.08;
-          const cruise = fish.facing * (0.72 + fish.depth * 0.48);
+          const cruise = fish.facing * (1.25 + fish.depth * 0.72);
           fish.vx += (cruise - fish.vx) * 0.025;
         }
         fish.x += fish.vx * motionSpeedFactor;
@@ -707,7 +709,7 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
       primaryFish.vy *= drag;
 
       // Speed cap
-      const maxSpeed = prefersReducedMotion ? 2.0 : isMobile ? 3.8 : 5.8;
+      const maxSpeed = prefersReducedMotion ? 2.0 : isMobile ? 4.8 : 7.0;
       const currentSpeed = Math.hypot(primaryFish.vx, primaryFish.vy);
       if (currentSpeed > maxSpeed) {
         primaryFish.vx = (primaryFish.vx / currentSpeed) * maxSpeed;
@@ -890,18 +892,15 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
 
             {/* Main Headline */}
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight font-['Manrope',sans-serif] leading-[1.15] sm:leading-[1.12] mb-4 sm:mb-6 drop-shadow-md">
-              <span className="sm:hidden">A Little Ocean,
-                <br /><span className="bg-gradient-to-r from-[#50D4EE] via-[#80E8FF] to-white bg-clip-text text-transparent">Right at Home.</span>
+              Bring Home a Little <br />
+              <span className="bg-gradient-to-r from-[#50D4EE] via-[#80E8FF] to-white bg-clip-text text-transparent">
+                Underwater Wonder.
               </span>
-              <span className="hidden sm:inline">Bring Home a Little <br /><span className="bg-gradient-to-r from-[#50D4EE] via-[#80E8FF] to-white bg-clip-text text-transparent">Underwater Wonder.</span></span>
             </h1>
 
             {/* Supporting paragraph */}
             <p className="text-sm sm:text-base lg:text-lg text-[#E8F9FC]/90 leading-relaxed mb-6 sm:mb-8 max-w-xl font-normal drop-shadow-xs">
-              <span className="sm:hidden">Colourful guppies. Thoughtful care. A calmer little world.
-                <br /><span className="text-xs text-[#E8F9FC]/75">Delivered across serviceable Tamil Nadu PIN codes.</span>
-              </span>
-              <span className="hidden sm:inline">Discover vivid guppies, everyday fish food and thoughtfully curated aquarium combos. Find your next little underwater favourite—with delivery to enabled serviceable PIN codes across Tamil Nadu.</span>
+              Discover vivid guppies, everyday fish food and thoughtfully curated aquarium combos. Find your next little underwater favourite—with delivery to enabled serviceable PIN codes across Tamil Nadu.
             </p>
 
             {/* Interactive CTAs */}

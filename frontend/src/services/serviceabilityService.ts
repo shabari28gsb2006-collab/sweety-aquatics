@@ -39,7 +39,7 @@ type PublicServiceability = {
   estimatedDeliveryDays?: number | null;
 };
 
-const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api').replace(/\/$/, '');
+const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:4000/api' : '/api')).replace(/\/$/, '');
 
 function mapBackendPincode(row: BackendPincode): ServiceablePincode {
   const days = row.estimatedDeliveryDays ?? undefined;

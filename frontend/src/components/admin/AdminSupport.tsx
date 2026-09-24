@@ -1,7 +1,7 @@
 import React,{useCallback,useEffect,useState} from 'react';
 import {AlertCircle,Loader2,LogIn,MessageSquare,RefreshCw,Send} from 'lucide-react';
 import {toastService} from '../../services/toastService';
-const API=(import.meta.env.VITE_API_BASE_URL||'http://localhost:4000/api').replace(/\/$/,'');
+const API=(import.meta.env.VITE_API_BASE_URL||(import.meta.env.DEV?'http://localhost:4000/api':'/api')).replace(/\/$/,'');
 type Ticket={id:string;subject:string;message:string;sellerReply?:string|null;status:'OPEN'|'IN_REVIEW'|'RESOLVED'|'CLOSED';createdAt:string;user:{name:string;email:string;mobile?:string};order?:{orderNumber:string}|null};
 class AdminSessionError extends Error{}
 async function api<T>(path:string,init:RequestInit={},retry=true):Promise<T>{const res=await fetch(`${API}${path}`,{...init,credentials:'include',headers:{'Content-Type':'application/json',...(init.headers||{})}});const body=await res.json().catch(()=>({}));if((res.status===401||res.status===403)&&retry){const refresh=await fetch(`${API}/auth/admin/refresh`,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:'{}'});if(refresh.ok)return api<T>(path,init,false);throw new AdminSessionError('Your seller session expired. Sign in again.');}if(res.status===401||res.status===403)throw new AdminSessionError(body.message||'Seller administrator access required');if(!res.ok||!body.success)throw new Error(body.message||'Request failed');return body.data;}

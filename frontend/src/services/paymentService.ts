@@ -1,4 +1,4 @@
-const API=(import.meta.env.VITE_API_BASE_URL||'http://localhost:4000/api').replace(/\/$/,'');
+const API=(import.meta.env.VITE_API_BASE_URL||(import.meta.env.DEV?'http://localhost:4000/api':'/api')).replace(/\/$/,'');
 type Envelope<T>={success:boolean;message?:string;data:T};
 async function request<T>(path:string,init:RequestInit={},retry=true):Promise<T>{const res=await fetch(`${API}${path}`,{...init,credentials:'include',headers:{'Content-Type':'application/json',...(init.headers||{})}});const body=await res.json().catch(()=>({})) as Envelope<T>;if(res.status===401&&retry){await request('/auth/refresh',{method:'POST',body:'{}'},false);return request<T>(path,init,false)}if(!res.ok||!body.success)throw new Error(body.message||`Payment request failed (${res.status})`);return body.data;}
 export type CheckoutPreview={items:any[];subtotal:number;shippingCharge:number;discount:number;total:number;currency:string;courierName?:string;estimatedDeliveryDays?:number;ready:boolean};

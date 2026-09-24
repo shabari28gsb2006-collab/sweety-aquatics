@@ -16,7 +16,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({ onLogin, onBackT
     e.preventDefault();
     if (!email.trim() || !password.trim()) return;
     setLoading(true); setError('');
-    try { const base = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api').replace(/\/$/, ''); const response = await fetch(`${base}/auth/admin/login`, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) }); const body = await response.json().catch(() => ({})); if (!response.ok || !body.success) throw new Error(body.message || 'Admin sign-in failed'); onLogin(); }
+    try { const base = (import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:4000/api' : '/api')).replace(/\/$/, ''); const response = await fetch(`${base}/auth/admin/login`, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) }); const body = await response.json().catch(() => ({})); if (!response.ok || !body.success) throw new Error(body.message || 'Admin sign-in failed'); onLogin(); }
     catch (reason) { setError(reason instanceof Error ? reason.message : 'Admin sign-in failed'); }
     finally { setLoading(false); }
   };
