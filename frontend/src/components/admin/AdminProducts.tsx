@@ -95,6 +95,11 @@ export const AdminProducts: React.FC<AdminProductsProps> = ({
 
   return (
     <div className="space-y-6">
+      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#032B42] via-[#064B70] to-[#0875B5] p-5 text-white shadow-lg sm:p-7">
+        <div className="pointer-events-none absolute -right-10 -top-16 h-48 w-48 rounded-full border-[24px] border-white/5" />
+        <p className="text-[11px] font-extrabold uppercase tracking-[.2em] text-cyan-200">Seller workspace · Catalog</p>
+        <div className="mt-2 flex flex-wrap items-end justify-between gap-4"><div><h2 className="text-2xl font-extrabold sm:text-3xl">Aquatic Product Studio</h2><p className="mt-1 max-w-xl text-sm text-sky-100">Curate your guppies, fish food and combo collections with live inventory controls.</p></div><div className="flex gap-2 text-xs font-bold"><span className="rounded-xl border border-white/15 bg-white/10 px-3 py-2">{products.length} total items</span><span className="rounded-xl border border-emerald-200/20 bg-emerald-300/10 px-3 py-2 text-emerald-100">{products.filter(p=>p.status==='ACTIVE'&&p.stock>0).length} live</span></div></div>
+      </section>
       {/* Top Controls */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>

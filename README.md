@@ -1,3 +1,6 @@
+
+> **Vercel single-project note:** import this repository with Framework Preset `Other` and Root Directory blank (`./`). The root `vercel.json` builds `frontend/` and routes `/api/*` to the Express function in `api/[...path].ts`. See [VERCEL-DEPLOYMENT.md](VERCEL-DEPLOYMENT.md) for exact setup and environment variables.
+
 # Sweety Birds & Fishes — Full-stack Phase 1
 
 This package combines the existing **Premium V2.5.1 frontend** with a new backend foundation.

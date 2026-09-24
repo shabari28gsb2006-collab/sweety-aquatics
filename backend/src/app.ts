@@ -19,9 +19,9 @@ app.use(helmet({
   referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
   strictTransportSecurity: env.NODE_ENV === 'production' ? { maxAge: 31_536_000, includeSubDomains: true, preload: true } : false,
 }));
-app.use(cors({ origin: env.FRONTEND_URL, credentials: true, methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'], allowedHeaders: ['Content-Type','Authorization','Idempotency-Key','X-Request-Id'], exposedHeaders: ['X-Request-Id','RateLimit','RateLimit-Policy'], maxAge: 86400 }));
+app.use(cors({ origin: env.FRONTEND_URL, credentials: true, methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'], allowedHeaders: ['Content-Type','Authorization','Idempotency-Key','X-Request-Id','Cache-Control','Pragma'], exposedHeaders: ['X-Request-Id','RateLimit','RateLimit-Policy'], maxAge: 86400 }));
 
-app.use(express.json({ limit: '3mb', strict: true }));
+app.use(express.json({ limit: '8mb', strict: true }));
 app.use(express.urlencoded({ extended: false, limit: '64kb', parameterLimit: 100 }));
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, limit: 300, standardHeaders: 'draft-7', legacyHeaders: false, skip: req => req.path.startsWith('/api/health') }));
 app.use('/api', (_req, res, next) => {

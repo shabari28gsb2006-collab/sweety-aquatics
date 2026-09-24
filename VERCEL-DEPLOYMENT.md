@@ -1,31 +1,17 @@
-# Sweety Aquatics — Single-project Vercel deployment
+# Sweety Aquatics — Single Vercel Project
 
-## Deploy (one Vercel project)
-1. Push this repository to GitHub.
-2. In Vercel, **Add New → Project**, import this repository.
-3. Keep the **Root Directory** as `./` (repository root).
-4. Vercel uses the included `vercel.json`; do not override Build/Install commands.
-5. Add the variables listed in `.env.example` under Vercel → Settings → Environment Variables. Use real production values only in Vercel. Set `FRONTEND_URL` to the deployed HTTPS domain.
-6. Set `IMAGE_STORAGE_PROVIDER=cloudinary` and configure Cloudinary. Serverless filesystem uploads are not durable.
-7. Deploy. API routes are served by the Express catch-all at `/api/*`; the React SPA is served for other routes. No separate backend Vercel project is needed.
+This repository is structured for one Vercel project at the **repository root**. Do not set the Root Directory to `frontend`; doing so excludes the root API function from the normal project build.
 
-## Database
-Use a reachable PostgreSQL provider. From a trusted local terminal, configure `backend/.env` (never commit it), then run:
-```bash
-cd backend
-npm ci
-npx prisma generate
-npx prisma migrate deploy
-npm run db:seed
-```
-Do not run destructive schema reset commands against production.
+1. Import `shabari28gsb2006-collab/sweety-aquatics` from GitHub.
+2. Keep Root Directory blank (`./`) and Framework Preset auto-detected/Other if needed.
+3. Keep the checked-in `vercel.json` build and install commands. It builds the frontend and backend TypeScript; `api/[...path].ts` exports the Express app for `/api/*`. The API function's native route handles API requests; the rewrite is only the SPA fallback.
+4. Configure environment variables from `backend/.env.example` in Vercel. Never add actual secrets to GitHub.
+5. Use a reachable PostgreSQL database and run `npx prisma migrate deploy` against it from a trusted terminal. Seed only when appropriate.
+6. Set `FRONTEND_URL` to the exact deployed HTTPS origin, production-strength unique JWT secrets, a 64-character hex encryption key, SMTP values, and Cloudinary credentials.
+7. Deploy, then test `/api/health`, customer login, admin login, care articles, and image upload.
 
-## Local development
-Terminal 1: `cd backend && npm run dev`
-Terminal 2: `cd frontend && npm run dev`
+## Care Guide Images
+Admin Console → **Care Guide Images**. Upload JPG/PNG/WebP up to 5 MB each. Recommended 1200 × 750 px (16:10). Upload stages the image; click **Save Image** to publish the new URL to the care article.
 
-## GitHub safety
-`.gitignore` excludes `.env*` (except `.env.example`), credentials, dependencies, build outputs, Vercel state and logs. Verify no secrets before pushing. Rotate any credential that was ever committed.
-
-## Care guide images
-Admin Console → **Care Guide Images**. Upload JPG/PNG/WebP, maximum 5 MB; recommended 1200 × 750 px (16:10). Uploaded image is staged until **Save Image** is clicked.
+## Important
+A successful Vercel build does not prove the database, mail, or external image service is reachable. Validate each in the deployed environment.

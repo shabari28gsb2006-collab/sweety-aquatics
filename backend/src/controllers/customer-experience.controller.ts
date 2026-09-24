@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import { z } from 'zod';
 import { prisma } from '../config/prisma.js';
+import { Prisma } from '@prisma/client';
 import type { AuthenticatedRequest } from '../middleware/auth.middleware.js';
 import { AppError } from '../middleware/errorHandler.js';
 import { ok } from '../utils/apiResponse.js';
@@ -254,6 +255,24 @@ export async function listAdminCareArticles(_req: Request, res: Response, next: 
   try { return ok(res, await prisma.careArticle.findMany({ orderBy: { publishedAt: 'desc' } })); }
   catch (error) { next(error); }
 }
+
+const careArticleUpdateInput = z.object({
+  title: z.string().trim().min(3).max(160),
+  subtitle: z.string().trim().max(240),
+  summary: z.string().trim().min(5).max(3000),
+  category: z.string().trim().min(2).max(80),
+  readTime: z.string().trim().min(1).max(40),
+  content: z.unknown(),
+  isPublished: z.boolean(),
+});
+export async function updateCareArticle(req: Request, res: Response, next: NextFunction) {
+  try {
+    const input = careArticleUpdateInput.parse(req.body);
+    const article = await prisma.careArticle.update({ where: { id: req.params.id }, data: { ...input, content: input.content as Prisma.InputJsonValue } });
+    return ok(res, article, 'Care tip updated');
+  } catch (error) { next(error); }
+}
+
 export async function updateCareArticleImage(req: Request, res: Response, next: NextFunction) {
   try {
     const input = careArticleImageInput.parse(req.body);

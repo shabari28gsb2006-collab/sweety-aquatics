@@ -1,4 +1,4 @@
-import { app } from '../backend/src/app.js';
+import { app } from '../backend/dist/src/app.js';
 
-// Catch-all Vercel Node.js Function forwarding requests to Express.
+// Vercel Node.js Function: Express handles all /api/* routes.
 export default app;

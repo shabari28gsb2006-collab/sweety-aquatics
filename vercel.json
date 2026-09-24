@@ -1,35 +1,17 @@
 {
+  "version": 2,
+  "buildCommand": "npm run vercel-build",
+  "installCommand": "npm run install:all",
+  "outputDirectory": "frontend/dist",
   "functions": {
     "api/[...path].ts": {
       "maxDuration": 60
     }
   },
-  "services": {
-    "frontend": {
-      "root": "frontend",
-      "framework": "vite"
-    },
-    "backend": {
-      "root": "backend"
-    }
-  },
-    }
-  },
   "rewrites": [
     {
-      "source": "/api(/.*)?",
-      "destination": {
-        "type": "service",
-        "service": "backend"
-      }
-    },
-    {
       "source": "/(.*)",
-      "destination": {
-        "type": "service",
-        "service": "frontend"
-      }
-    }
+      "destination": "/index.html"
     }
   ]
 }

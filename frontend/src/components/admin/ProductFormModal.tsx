@@ -218,52 +218,34 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto animate-in fade-in">
-      <div className="w-full max-w-3xl bg-white rounded-3xl shadow-2xl border border-sky-100 overflow-hidden my-8 max-h-[90vh] flex flex-col">
-        {/* Header */}
-        <div className="bg-[#021E31] p-5 text-white flex items-center justify-between shrink-0">
-          <div>
-            <h3 className="font-bold text-base font-['Manrope',sans-serif]">
+      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-2xl border border-sky-100 overflow-hidden my-4 max-h-[94vh] flex flex-col">
+        {/* Premium, uncluttered header */}
+        <div className="bg-gradient-to-r from-[#021E31] via-[#063B58] to-[#07577D] p-5 sm:p-7 text-white flex items-start justify-between gap-4 shrink-0">
+          <div className="min-w-0">
+            <p className="text-[10px] sm:text-xs font-extrabold uppercase tracking-[.22em] text-cyan-300">Catalog management · Product studio</p>
+            <h3 className="mt-1 text-xl sm:text-2xl font-extrabold font-['Manrope',sans-serif]">
               {productToEdit ? 'Edit Product' : 'Add New Aquatic Product'}
             </h3>
-            <p className="text-xs text-[#E8F9FC]/80">
-              Only Guppies, Fish Food, and Combo Packs are cataloged.
+            <p className="mt-2 max-w-2xl text-xs sm:text-sm leading-relaxed text-sky-100/90">
+              Create a polished, informative listing. Add clear product details, pricing, stock and images for your storefront.
             </p>
-          </div>
-
-          {/* Optional Scheduled Offer */}
-          <div className="p-4 rounded-2xl bg-amber-50 border border-amber-100">
-            <h4 className="font-bold text-[#032B42]">Scheduled Product Offer</h4>
-            <p className="text-[11px] text-slate-500 mt-1 mb-3">Set both fields to show a live customer countdown. Clear both fields to disable the offer.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="font-bold text-slate-700 block mb-1">Offer Price (₹)</label>
-                <input type="number" min="0.01" step="0.01" value={offerPrice} onChange={(e) => setOfferPrice(e.target.value)} placeholder="e.g. 299" className="w-full p-2.5 bg-white border border-amber-200 rounded-xl focus:outline-none focus:border-amber-500" />
-              </div>
-              <div>
-                <label className="font-bold text-slate-700 block mb-1">Offer Ends At</label>
-                <input type="datetime-local" value={offerEndsAt} onChange={(e) => setOfferEndsAt(e.target.value)} className="w-full p-2.5 bg-white border border-amber-200 rounded-xl focus:outline-none focus:border-amber-500" />
-              </div>
+            <div className="mt-3 flex flex-wrap gap-2 text-[10px] sm:text-xs font-semibold text-cyan-50">
+              <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1">Guppies</span>
+              <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1">Fish food</span>
+              <span className="rounded-full border border-white/15 bg-white/10 px-3 py-1">Combo & wholesale</span>
             </div>
-            {(offerPrice || offerEndsAt) && <button type="button" onClick={() => { setOfferPrice(''); setOfferEndsAt(''); }} className="mt-3 text-[11px] font-bold text-rose-600 hover:underline">Clear scheduled offer</button>}
           </div>
-          <div className="p-4 rounded-2xl bg-sky-50 border border-sky-100">
-            <h4 className="font-bold text-[#032B42]">Seller Display Rating (optional)</h4>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
-              <div><label className="font-semibold text-slate-700 block mb-1">Stars (0–5)</label><input type="number" min="0" max="5" step="0.1" value={sellerRating} onChange={e=>setSellerRating(e.target.value)} placeholder="e.g. 4.5" className="w-full p-2.5 bg-white border border-sky-200 rounded-xl"/></div>
-              <div><label className="font-semibold text-slate-700 block mb-1">Display count</label><input type="number" min="0" max="1000000" step="1" value={sellerRatingCount} onChange={e=>setSellerRatingCount(e.target.value)} placeholder="e.g. 120" className="w-full p-2.5 bg-white border border-sky-200 rounded-xl"/></div>
-            </div>
-            <p className="text-[11px] text-slate-500 mt-2">Optional storefront display rating. Real verified customer review scores and counts always take priority.</p>
-          </div>
-          <button
-            onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
-          >
-            <X className="w-4 h-4" />
+          <button type="button" onClick={onClose} aria-label="Close product form" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/15 bg-white/10 text-white transition hover:bg-white/20">
+            <X className="h-5 w-5" />
           </button>
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="p-6 overflow-y-auto space-y-6 flex-1 text-xs">
+        <form onSubmit={handleSubmit} className="flex-1 space-y-7 overflow-y-auto bg-[#F7FBFE] p-4 text-sm sm:p-7">
+          <div className="rounded-2xl border border-sky-100 bg-white p-4 shadow-sm sm:p-5">
+            <h4 className="text-sm font-extrabold text-[#032B42] sm:text-base">Product information</h4>
+            <p className="mt-1 text-xs leading-relaxed text-slate-500">Fields marked required should be completed before saving. Use accurate pricing, stock and product descriptions.</p>
+          </div>
           {/* Top Row: SKU, Category, Status */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
@@ -273,7 +255,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 required
                 value={sku}
                 onChange={(e) => setSku(e.target.value)}
-                className="w-full p-2.5 bg-[#F8FDFF] border border-sky-200 rounded-xl focus:outline-none focus:border-[#0875B5] font-mono"
+                className="w-full p-3 bg-white border border-sky-200 rounded-xl text-sm focus:outline-none focus:border-[#0875B5] font-mono"
               />
             </div>
 
@@ -282,7 +264,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as ProductCategory)}
-                className="w-full p-2.5 bg-[#F8FDFF] border border-sky-200 rounded-xl focus:outline-none focus:border-[#0875B5]"
+                className="w-full p-3 bg-white border border-sky-200 rounded-xl text-sm focus:outline-none focus:border-[#0875B5]"
               >
                 <option value="guppies">Guppies</option>
                 <option value="fish-food">Fish Food &amp; Nutrition</option>
@@ -296,7 +278,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as ProductStatus)}
-                className="w-full p-2.5 bg-[#F8FDFF] border border-sky-200 rounded-xl focus:outline-none focus:border-[#0875B5]"
+                className="w-full p-3 bg-white border border-sky-200 rounded-xl text-sm focus:outline-none focus:border-[#0875B5]"
               >
                 <option value="ACTIVE">ACTIVE (Available)</option>
                 <option value="COMING_SOON">COMING SOON (Not Orderable)</option>
@@ -305,6 +287,25 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 <option value="ARCHIVED">ARCHIVED</option>
               </select>
             </div>
+          </div>
+
+          {/* Optional commercial settings */}
+          <div className="grid gap-5 xl:grid-cols-2">
+            <section className="rounded-2xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-4 shadow-sm sm:p-5">
+              <div className="mb-3 flex items-center gap-2"><span className="rounded-lg bg-amber-100 p-2 text-amber-700">✦</span><div><h4 className="font-extrabold text-[#032B42]">Scheduled Product Offer</h4><p className="mt-0.5 text-xs leading-relaxed text-slate-500">Set both fields to show a live customer countdown. Clear both to disable.</p></div></div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div><label className="mb-1.5 block text-xs font-bold text-slate-700">Offer Price (₹)</label><input type="number" min="0.01" step="0.01" value={offerPrice} onChange={(e) => setOfferPrice(e.target.value)} placeholder="e.g. 299" className="w-full rounded-xl border border-amber-200 bg-white p-3 text-sm focus:border-amber-500 focus:outline-none" /></div>
+                <div><label className="mb-1.5 block text-xs font-bold text-slate-700">Offer Ends At</label><input type="datetime-local" value={offerEndsAt} onChange={(e) => setOfferEndsAt(e.target.value)} className="w-full rounded-xl border border-amber-200 bg-white p-3 text-sm focus:border-amber-500 focus:outline-none" /></div>
+              </div>
+              {(offerPrice || offerEndsAt) && <button type="button" onClick={() => { setOfferPrice(''); setOfferEndsAt(''); }} className="mt-3 text-xs font-bold text-rose-600 hover:underline">Clear scheduled offer</button>}
+            </section>
+            <section className="rounded-2xl border border-sky-100 bg-gradient-to-br from-sky-50 to-white p-4 shadow-sm sm:p-5">
+              <div className="mb-3"><h4 className="font-extrabold text-[#032B42]">Seller Display Rating <span className="font-medium text-slate-400">(optional)</span></h4><p className="mt-1 text-xs leading-relaxed text-slate-500">Verified customer review scores and counts always take priority.</p></div>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div><label className="mb-1.5 block text-xs font-bold text-slate-700">Stars (0–5)</label><input type="number" min="0" max="5" step="0.1" value={sellerRating} onChange={e=>setSellerRating(e.target.value)} placeholder="e.g. 4.5" className="w-full rounded-xl border border-sky-200 bg-white p-3 text-sm"/></div>
+                <div><label className="mb-1.5 block text-xs font-bold text-slate-700">Display count</label><input type="number" min="0" max="1000000" step="1" value={sellerRatingCount} onChange={e=>setSellerRatingCount(e.target.value)} placeholder="e.g. 120" className="w-full rounded-xl border border-sky-200 bg-white p-3 text-sm"/></div>
+              </div>
+            </section>
           </div>
 
           {/* Product Title */}
@@ -316,7 +317,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Red Dragon Dumbo Ear Guppy (Pair)"
-              className="w-full p-2.5 bg-[#F8FDFF] border border-sky-200 rounded-xl focus:outline-none focus:border-[#0875B5]"
+              className="w-full p-3 bg-white border border-sky-200 rounded-xl text-sm focus:outline-none focus:border-[#0875B5]"
             />
           </div>
 
@@ -330,7 +331,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 min={0}
                 value={price}
                 onChange={(e) => setPrice(Number(e.target.value))}
-                className="w-full p-2.5 bg-[#F8FDFF] border border-sky-200 rounded-xl focus:outline-none focus:border-[#0875B5]"
+                className="w-full p-3 bg-white border border-sky-200 rounded-xl text-sm focus:outline-none focus:border-[#0875B5]"
               />
             </div>
 
@@ -341,7 +342,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 min={0}
                 value={mrp}
                 onChange={(e) => setMrp(Number(e.target.value))}
-                className="w-full p-2.5 bg-[#F8FDFF] border border-sky-200 rounded-xl focus:outline-none focus:border-[#0875B5]"
+                className="w-full p-3 bg-white border border-sky-200 rounded-xl text-sm focus:outline-none focus:border-[#0875B5]"
               />
             </div>
 
@@ -352,7 +353,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
                 min={0}
                 value={stock}
                 onChange={(e) => setStock(Number(e.target.value))}
-                className="w-full p-2.5 bg-[#F8FDFF] border border-sky-200 rounded-xl focus:outline-none focus:border-[#0875B5]"
+                className="w-full p-3 bg-white border border-sky-200 rounded-xl text-sm focus:outline-none focus:border-[#0875B5]"
               />
             </div>
           </div>
@@ -366,7 +367,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
               value={shortDesc}
               onChange={(e) => setShortDesc(e.target.value)}
               placeholder="Brief summary for catalog cards"
-              className="w-full p-2.5 bg-[#F8FDFF] border border-sky-200 rounded-xl focus:outline-none focus:border-[#0875B5]"
+              className="w-full p-3 bg-white border border-sky-200 rounded-xl text-sm focus:outline-none focus:border-[#0875B5]"
             />
           </div>
 
@@ -378,7 +379,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
               value={longDesc}
               onChange={(e) => setLongDesc(e.target.value)}
               placeholder="Full details on lineage, feeding habit, and tank conditions"
-              className="w-full p-2.5 bg-[#F8FDFF] border border-sky-200 rounded-xl focus:outline-none focus:border-[#0875B5]"
+              className="w-full p-3 bg-white border border-sky-200 rounded-xl text-sm focus:outline-none focus:border-[#0875B5]"
             />
           </div>
 
@@ -585,7 +586,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
           )}
 
           {category === 'wholesale' && (
-            <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-100 space-y-2">
+            <div className="p-5 rounded-2xl bg-amber-50/70 border border-amber-100 space-y-3">
               <h4 className="font-bold text-[#032B42] uppercase tracking-wider">Wholesale Listing</h4>
               <p className="text-xs text-slate-600 leading-relaxed">
                 Use the normal name, price, stock, description and image fields above. Clearly mention the bulk quantity or pack size in the product name and description. Wholesale is a normal store category, not an enquiry form.
@@ -617,7 +618,7 @@ export const ProductFormModal: React.FC<ProductFormModalProps> = ({
             </button>
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-xl bg-[#0875B5] hover:bg-[#064463] text-white font-bold shadow-md flex items-center gap-2"
+              className="min-h-12 px-7 py-3 rounded-xl bg-gradient-to-r from-[#0875B5] to-[#0B91C8] hover:brightness-105 text-white font-extrabold shadow-md flex items-center gap-2 transition"
             >
               <Save className="w-4 h-4" />
               {productToEdit ? 'Save Changes' : 'Create Product'}

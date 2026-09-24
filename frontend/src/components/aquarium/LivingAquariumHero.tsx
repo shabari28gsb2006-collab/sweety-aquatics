@@ -242,6 +242,8 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
     // POINTER & TOUCH LISTENERS
     // ==========================================
     const handleMouseMove = (e: MouseEvent) => {
+      // Touchscreens should always retain autonomous swimming; ignore synthetic mouse events.
+      if (isTouchDevice() || isMobile) return;
       const rect = canvas.getBoundingClientRect();
       const clientX = e.clientX - rect.left;
       const clientY = e.clientY - rect.top;
@@ -267,6 +269,8 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
 
     let lastTouchRipple = 0;
     const handleTouch = (e: TouchEvent, ripple = false) => {
+      // Touch interaction is decorative only; never make fish chase fingers.
+      if (isTouchDevice() || isMobile) return;
       const rect = canvas.getBoundingClientRect();
       if (e.touches.length > 0) {
         const touch = e.touches[0];
@@ -600,7 +604,7 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
           if (schoolSpeed > cap) { fish.vx = fish.vx / schoolSpeed * cap; fish.vy = fish.vy / schoolSpeed * cap; }
         } else {
           fish.vy += (Math.sin(tick * 0.025 + fish.x * 0.008) * 0.45 - fish.vy) * 0.08;
-          const cruise = fish.facing * (1.8 + fish.depth * 1.0);
+          const cruise = fish.facing * (2.35 + fish.depth * 1.25);
           fish.vx += (cruise - fish.vx) * 0.025;
         }
         fish.x += fish.vx * motionSpeedFactor;
@@ -612,9 +616,11 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
         if (fish.x > width + pad && fish.vx > 0) {
           fish.x = -pad;
           fish.y = Math.random() * (height * 0.75) + 50;
+          if (Math.random() < 0.28) fish.facing = -1;
         } else if (fish.x < -pad && fish.vx < 0) {
           fish.x = width + pad;
           fish.y = Math.random() * (height * 0.75) + 50;
+          if (Math.random() < 0.28) fish.facing = 1;
         }
 
         // Smooth pitch orientation based on velocity
@@ -673,7 +679,7 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
         // MOBILE & IDLE DESKTOP: Autonomous Graceful Curved Movement
         // Smooth parametric path traversing aquarium with natural arcs
         // -------------------------------------------------------------
-        primaryFish.curvedPhase += 0.012 * motionSpeedFactor;
+        primaryFish.curvedPhase += 0.016 * motionSpeedFactor;
         const centerX = width * 0.58;
         const centerY = height * 0.46;
         const spreadX = Math.min(width * 0.36, 320);
@@ -707,7 +713,7 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
       primaryFish.vy *= drag;
 
       // Speed cap
-      const maxSpeed = prefersReducedMotion ? 2.0 : isMobile ? 6.2 : 8.5;
+      const maxSpeed = prefersReducedMotion ? 2.0 : isMobile ? 8.0 : 10.5;
       const currentSpeed = Math.hypot(primaryFish.vx, primaryFish.vy);
       if (currentSpeed > maxSpeed) {
         primaryFish.vx = (primaryFish.vx / currentSpeed) * maxSpeed;
@@ -868,7 +874,7 @@ export const LivingAquariumHero: React.FC<LivingAquariumHeroProps> = ({
         {/* Background Canvas Layer */}
         <canvas
           ref={canvasRef}
-          className="absolute inset-0 w-full h-full pointer-events-auto opacity-90"
+          className="absolute inset-0 w-full h-full pointer-events-none opacity-90"
           aria-label="Interactive aquarium simulation"
         />
 

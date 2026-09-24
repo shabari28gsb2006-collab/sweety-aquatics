@@ -57,7 +57,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ onNavigateToStore, onL
     const API=(import.meta.env.VITE_API_BASE_URL||(import.meta.env.DEV?'http://localhost:4000/api':'/api')).replace(/\/$/,'');
     let stopped=false;
     const poll=async()=>{if(stopped||document.visibilityState!=='visible')return;try{let res=await fetch(`${API}/payments/admin/notifications`,{credentials:'include'});if(res.status===401){const refreshed=await fetch(`${API}/auth/admin/refresh`,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:'{}'});if(refreshed.ok)res=await fetch(`${API}/payments/admin/notifications`,{credentials:'include'});}if(res.status===401||res.status===403){stopped=true;return;}const body=await res.json();if(res.ok&&body.success)setUnreadPayments(body.data.filter((item:any)=>!item.isRead).length);}catch{/* retry later */}};
-    void poll();const timer=window.setInterval(()=>void poll(),5000);return()=>{stopped=true;window.clearInterval(timer)};
+    void poll();const timer=window.setInterval(()=>void poll(),20000);return()=>{stopped=true;window.clearInterval(timer)};
   },[]);
 
   const handleRefreshData = () => {
@@ -96,7 +96,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ onNavigateToStore, onL
     { id: 'support', label: 'Support', icon: MessageSquare },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'settings', label: 'Contact Settings', icon: Settings },
-    { id: 'care-images', label: 'Care Guide Images', icon: ImageIcon },
+    { id: 'care-images', label: 'Guppy Care Tips', icon: ImageIcon },
   ];
 
   return (

@@ -4,3 +4,4 @@ Disallow: /admin
 Disallow: /account
 Disallow: /checkout
 Disallow: /cart
+Sitemap: https://sweety-aquatics.elzo.in/sitemap.xml

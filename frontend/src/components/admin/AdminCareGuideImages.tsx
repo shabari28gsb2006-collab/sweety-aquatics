@@ -1,60 +1,46 @@
 import React, { useEffect, useState } from 'react';
 import { productService } from '../../services/productService';
 import { toastService } from '../../services/toastService';
-import { Image as ImageIcon, Save, Upload } from 'lucide-react';
+import { Save, Upload, RefreshCw, FileText, Pencil, X, Eye, CheckCircle2 } from 'lucide-react';
 
-type Article = { id: string; title: string; slug: string; bannerImage: string };
-const API = (import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? 'http://localhost:4000/api' : '/api')).replace(/\\/$/, '');
-
-export const AdminCareGuideImages: React.FC = () => {
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [drafts, setDrafts] = useState<Record<string,string>>({});
-  const [busy, setBusy] = useState<string>('');
-  const load = async () => {
-    const res = await fetch(`${API}/admin/customer-experience/care-articles`, { credentials: 'include' });
-    const body = await res.json().catch(() => ({}));
-    if (!res.ok || !body.success || !Array.isArray(body.data)) throw new Error(body.message || 'Unable to load care guides');
-    setArticles(body.data); setDrafts(Object.fromEntries(body.data.map((a:Article) => [a.id,a.bannerImage])));
-  };
-  useEffect(() => { void load().catch(e => toastService.error('Care guides unavailable', e.message)); }, []);
-  const upload = async (id:string, file?:File) => {
-    if (!file) return;
-    if (!['image/jpeg','image/png','image/webp'].includes(file.type) || file.size > 5*1024*1024) {
-      toastService.error('Invalid image','Use JPG, PNG or WebP up to 5 MB. Recommended: 1200 × 750 px.'); return;
-    }
-    try {
-      const data = await new Promise<string>((resolve,reject) => { const r=new FileReader(); r.onload=()=>resolve(String(r.result)); r.onerror=reject; r.readAsDataURL(file); });
-      const result = await productService.uploadImage(data);
-      setDrafts(prev=>({...prev,[id]:result.url}));
-      toastService.success('Image uploaded','Click Save Image to publish this care guide image.');
-    } catch(e) { toastService.error('Upload failed',e instanceof Error?e.message:'Unable to upload image'); }
-  };
-  const save = async (id:string) => {
-    setBusy(id);
-    try {
-      const res=await fetch(`${API}/admin/customer-experience/care-articles/${id}/image`,{method:'PATCH',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({bannerImage:drafts[id]})});
-      const body=await res.json().catch(()=>({}));
-      if(!res.ok||!body.success) throw new Error(body.message||'Could not save image');
-      toastService.success('Image saved','Care guide image published.');
-      await load();
-    } catch(e) { toastService.error('Save failed',e instanceof Error?e.message:'Please try again'); }
-    finally { setBusy(''); }
-  };
-  return <section className="space-y-5">
-    <div><h2 className="text-2xl font-extrabold text-[#032B42]">Care Guide Images</h2>
-    <p className="text-sm text-slate-500 mt-1">Upload a matching guppy-care image for each article, then save it to publish.</p>
-    <p className="text-xs text-sky-700 mt-2 font-semibold">Recommended: 1200 × 750 px (16:10) • JPG, PNG or WebP • Maximum 5 MB per image</p></div>
-    {articles.map(article=><div key={article.id} className="bg-white border border-sky-100 rounded-2xl p-4 sm:p-5 space-y-3">
-      <h3 className="font-bold text-[#032B42]">{article.title}</h3>
-      <div className="grid sm:grid-cols-[180px_1fr] gap-4 items-start">
-        <img src={drafts[article.id]||article.bannerImage} alt={article.title} className="w-full aspect-[16/10] object-cover rounded-xl bg-sky-50"/>
-        <div className="space-y-3 min-w-0">
-          <label className="block text-xs font-bold text-slate-600">Image URL</label>
-          <input value={drafts[article.id]||''} onChange={e=>setDrafts(prev=>({...prev,[article.id]:e.target.value}))} className="w-full border border-slate-200 rounded-xl p-3 text-sm" placeholder="https://..."/>
-          <label className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-sky-50 text-sky-800 text-xs font-bold cursor-pointer"><Upload className="w-4 h-4"/> Upload replacement<input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={e=>void upload(article.id,e.target.files?.[0])}/></label>
-          <button disabled={busy===article.id||!drafts[article.id]} onClick={()=>void save(article.id)} className="ml-2 inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-[#0875B5] text-white text-xs font-bold disabled:opacity-50"><Save className="w-4 h-4"/>{busy===article.id?'Saving…':'Save Image'}</button>
-        </div>
-      </div>
-    </div>)}
-  </section>;
+type Article = { id:string; title:string; slug:string; subtitle:string; summary:string; category:string; readTime:string; bannerImage:string; content:unknown; isPublished:boolean };
+const API=(import.meta.env.VITE_API_BASE_URL||(import.meta.env.DEV?'http://localhost:4000/api':'/api')).replace(/\/+$/,'');
+const field='w-full min-w-0 rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-sky-500 focus:ring-2 focus:ring-sky-100 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-500';
+const paragraphs=(content:unknown):string=>{
+ if(!Array.isArray(content)) return typeof content==='string'?content:'';
+ return content.flatMap((s:any)=>[...(s?.heading?[`## ${s.heading}`]:[]),...(Array.isArray(s?.body)?s.body:[]),...(Array.isArray(s?.tips)&&s.tips.length?[`Care note: ${s.tips.join(' ')}`]:[])]).join('\n\n');
+};
+const contentFromText=(value:string)=>{
+ const blocks=value.split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean);
+ const sections:{heading:string;body:string[]}[]=[]; let current:{heading:string;body:string[]}|null=null;
+ for(const block of blocks){
+  if(block.startsWith('## ')){if(current)sections.push(current);current={heading:block.replace(/^##\s*/,''),body:[]};}
+  else {if(!current)current={heading:'Care Guide',body:[]};current.body.push(block.replace(/\n+/g,' ').trim());}
+ }
+ if(current)sections.push(current);
+ return sections.length?sections:[{heading:'Care Guide',body:['Add your care guidance here.']}];
+};
+export const AdminCareGuideImages:React.FC=()=>{
+ const [articles,setArticles]=useState<Article[]>([]); const [drafts,setDrafts]=useState<Record<string,Article>>({}); const [contentDrafts,setContentDrafts]=useState<Record<string,string>>({}); const [editing,setEditing]=useState<Record<string,boolean>>({}); const [busy,setBusy]=useState(''); const [loading,setLoading]=useState(true); const [loadError,setLoadError]=useState('');
+ const load=async()=>{setLoading(true);setLoadError('');try{const res=await fetch(`${API}/admin/customer-experience/care-articles`,{credentials:'include'});const body=await res.json().catch(()=>({}));if(!res.ok||!body.success||!Array.isArray(body.data))throw new Error(body.message||'Unable to load care guides');setArticles(body.data);setDrafts(Object.fromEntries(body.data.map((a:Article)=>[a.id,{...a}])));setContentDrafts(Object.fromEntries(body.data.map((a:Article)=>[a.id,paragraphs(a.content)])));setEditing({});}catch(e){setLoadError(e instanceof Error?e.message:'Unable to load care guides');}finally{setLoading(false)}};
+ useEffect(()=>{void load()},[]);
+ const update=(id:string,key:keyof Article,value:any)=>setDrafts(prev=>({...prev,[id]:{...prev[id],[key]:value}}));
+ const beginEdit=(a:Article)=>{setDrafts(p=>({...p,[a.id]:{...a}}));setContentDrafts(p=>({...p,[a.id]:paragraphs(a.content)}));setEditing(p=>({...p,[a.id]:true}));};
+ const cancelEdit=(id:string)=>{const original=articles.find(a=>a.id===id);if(original){setDrafts(p=>({...p,[id]:{...original}}));setContentDrafts(p=>({...p,[id]:paragraphs(original.content)}));}setEditing(p=>({...p,[id]:false}));};
+ const upload=async(id:string,file?:File)=>{if(!file)return;if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>5*1024*1024){toastService.error('Invalid image','Use JPG, PNG or WebP up to 5 MB. Recommended: 1200 × 750 px.');return;}setBusy(`upload:${id}`);try{const data=await new Promise<string>((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result));r.onerror=reject;r.readAsDataURL(file)});const result=await productService.uploadImage(data);update(id,'bannerImage',result.url);toastService.success('Uploaded','Remember to save your changes.')}catch(e){toastService.error('Upload failed',e instanceof Error?e.message:'Unable to upload image')}finally{setBusy('')}};
+ const save=async(id:string)=>{setBusy(id);try{const a=drafts[id];const res=await fetch(`${API}/admin/customer-experience/care-articles/${id}`,{method:'PATCH',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:a.title,subtitle:a.subtitle,summary:a.summary,category:a.category,readTime:a.readTime,content:contentFromText(contentDrafts[id]||''),isPublished:a.isPublished})});const body=await res.json().catch(()=>({}));if(!res.ok||!body.success)throw new Error(body.message||'Could not save care tip');if(a.bannerImage!==articles.find(x=>x.id===id)?.bannerImage){const ir=await fetch(`${API}/admin/customer-experience/care-articles/${id}/image`,{method:'PATCH',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({bannerImage:a.bannerImage})});const ib=await ir.json().catch(()=>({}));if(!ir.ok||!ib.success)throw new Error(ib.message||'Text saved, but image update failed');}toastService.success('Care tip saved','Your changes have been saved.');await load()}catch(e){toastService.error('Save failed',e instanceof Error?e.message:'Please check your content and try again')}finally{setBusy('')}};
+ return <section className="min-w-0 space-y-6 text-slate-700">
+  <header className="overflow-hidden rounded-3xl bg-gradient-to-br from-[#032B42] via-[#07577D] to-[#0786B8] p-6 text-white shadow-lg sm:p-8"><div className="flex items-center gap-4"><span className="rounded-2xl border border-white/15 bg-white/10 p-3"><FileText className="h-7 w-7"/></span><div><p className="text-xs font-bold uppercase tracking-[.2em] text-cyan-200">Content studio</p><h2 className="mt-1 text-2xl font-extrabold sm:text-3xl">Guppy Care Tips</h2></div></div><p className="mt-4 max-w-2xl text-sm leading-6 text-sky-100">Manage the care guides customers read on your storefront. Guides stay locked until you choose Edit.</p><div className="mt-5 flex flex-wrap gap-2 text-xs font-semibold"><span className="rounded-full bg-white/10 px-3 py-1.5">{articles.length} guides</span><span className="rounded-full bg-white/10 px-3 py-1.5">{articles.filter(a=>a.isPublished).length} published</span><span className="rounded-full bg-white/10 px-3 py-1.5">JPG · PNG · WebP</span></div></header>
+  <div className="flex flex-wrap items-start gap-3 rounded-2xl border border-sky-100 bg-white px-4 py-3 text-xs leading-5 text-slate-600 shadow-sm"><CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-sky-600"/><p><b className="text-slate-800">Image guide:</b> 1200 × 750 px recommended · max 5 MB. Article content uses a simple readable editor—no JSON required.</p></div>
+  {loading&&<div className="flex items-center gap-2 rounded-2xl bg-white p-5 text-sm text-slate-600"><RefreshCw className="h-4 w-4 animate-spin"/>Loading care tips…</div>}
+  {!loading&&loadError&&<div className="rounded-2xl border border-rose-100 bg-rose-50 p-4 text-sm text-rose-800">{loadError}<button onClick={()=>void load()} className="ml-3 font-bold underline">Try again</button></div>}
+  {!loading&&!loadError&&!articles.length&&<p className="rounded-2xl bg-white p-5 text-sm">No guides found. Check that the database is migrated and seeded.</p>}
+  {articles.map(article=>{const a=drafts[article.id]||article;const isEditing=!!editing[article.id];return <article key={article.id} className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+   <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-100 bg-slate-50/80 p-5 sm:p-6"><div className="min-w-0"><div className="mb-2 flex flex-wrap items-center gap-2"><span className="rounded-full bg-sky-100 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wider text-sky-800">{article.category}</span><span className="text-xs text-slate-400">/{article.slug}</span></div><h3 className="text-lg font-extrabold leading-snug text-[#032B42]">{article.title}</h3><p className="mt-1 text-sm text-slate-500">{article.subtitle}</p></div><div className="flex shrink-0 items-center gap-2"><span className={`rounded-full px-3 py-1.5 text-xs font-bold ${a.isPublished?'bg-emerald-50 text-emerald-700':'bg-slate-100 text-slate-500'}`}>{a.isPublished?'Published':'Draft'}</span>{!isEditing?<button onClick={()=>beginEdit(article)} className="inline-flex min-h-10 items-center gap-2 rounded-xl bg-[#0875B5] px-4 text-sm font-bold text-white shadow-sm transition hover:bg-[#065E91]"><Pencil className="h-4 w-4"/>Edit</button>:<button onClick={()=>cancelEdit(article.id)} className="inline-flex min-h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 text-sm font-bold text-slate-600 hover:bg-slate-50"><X className="h-4 w-4"/>Cancel</button>}</div></div>
+   <div className="grid gap-5 p-5 sm:p-6 lg:grid-cols-[250px_minmax(0,1fr)]"><div className="space-y-3"><div className="overflow-hidden rounded-2xl bg-slate-100 ring-1 ring-slate-200"><img src={a.bannerImage} alt={`${a.title} care guide`} loading="lazy" className="aspect-[16/10] w-full object-cover"/></div>{isEditing&&<><label className="block text-xs font-bold text-slate-600">Image URL<input className={`${field} mt-1`} value={a.bannerImage} onChange={e=>update(article.id,'bannerImage',e.target.value)} placeholder="Paste image URL"/></label><label className="flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-xl border border-sky-100 bg-sky-50 px-3 py-2 text-sm font-bold text-sky-800 transition hover:bg-sky-100"><Upload className="h-4 w-4"/>{busy===`upload:${article.id}`?'Uploading…':'Upload new image'}<input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" disabled={busy.startsWith('upload:')} onChange={e=>{void upload(article.id,e.target.files?.[0]);e.currentTarget.value=''}}/></label></>}</div>
+    <div className="min-w-0 space-y-4"><label className="block text-xs font-bold text-slate-600">Article title<input disabled={!isEditing} className={`${field} mt-1`} value={a.title} onChange={e=>update(article.id,'title',e.target.value)}/></label><label className="block text-xs font-bold text-slate-600">Subtitle<input disabled={!isEditing} className={`${field} mt-1`} value={a.subtitle} onChange={e=>update(article.id,'subtitle',e.target.value)}/></label><div className="grid gap-3 sm:grid-cols-2"><label className="block text-xs font-bold text-slate-600">Category<input disabled={!isEditing} className={`${field} mt-1`} value={a.category} onChange={e=>update(article.id,'category',e.target.value)}/></label><label className="block text-xs font-bold text-slate-600">Read time<input disabled={!isEditing} className={`${field} mt-1`} value={a.readTime} onChange={e=>update(article.id,'readTime',e.target.value)}/></label></div><label className="block text-xs font-bold text-slate-600">Summary<textarea disabled={!isEditing} rows={3} className={`${field} mt-1 resize-y leading-relaxed`} value={a.summary} onChange={e=>update(article.id,'summary',e.target.value)}/></label><label className="flex cursor-pointer items-center gap-2 text-sm font-semibold text-slate-700"><input type="checkbox" disabled={!isEditing} checked={a.isPublished} onChange={e=>update(article.id,'isPublished',e.target.checked)} className="h-4 w-4 rounded accent-sky-600 disabled:opacity-50"/>Publish this guide on the storefront</label></div></div>
+   <div className="mx-5 mb-5 rounded-2xl border border-slate-100 bg-slate-50/70 p-4 sm:mx-6 sm:mb-6 sm:p-5"><div className="mb-3 flex items-center gap-2"><Eye className="h-4 w-4 text-sky-700"/><h4 className="text-sm font-extrabold text-[#032B42]">Article content</h4></div>{isEditing?<><p className="mb-2 text-xs leading-relaxed text-slate-500">Use <b>## Heading</b> on its own line for a section title. Separate paragraphs with a blank line. No JSON formatting needed.</p><textarea rows={12} className={`${field} resize-y font-sans leading-6`} value={contentDrafts[article.id]||''} onChange={e=>setContentDrafts(p=>({...p,[article.id]:e.target.value}))} placeholder="## Care Guide&#10;&#10;Write a paragraph…"/></>:<div className="space-y-3">{Array.isArray(a.content)?a.content.map((sec:any,i)=><div key={i} className="space-y-2"><h5 className="font-bold text-slate-800">{sec.heading||'Care Guide'}</h5>{(Array.isArray(sec.body)?sec.body:[]).map((p:string,j)=><p key={j} className="text-sm leading-6 text-slate-600">{p}</p>)}{Array.isArray(sec.tips)&&sec.tips.map((tip:string,j)=><p key={`t${j}`} className="rounded-lg bg-sky-50 p-3 text-sm text-sky-800">Care note: {tip}</p>)}</div>):<p className="text-sm text-slate-600">{String(a.content||'No article text yet.')}</p>}</div>}</div>
+   {isEditing&&<div className="flex flex-col-reverse gap-2 border-t border-slate-100 bg-white px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6"><p className="text-xs text-slate-400">Changes go live when you save.</p><button disabled={busy===article.id} onClick={()=>void save(article.id)} className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#0875B5] to-[#0B91C8] px-5 py-2.5 text-sm font-extrabold text-white shadow-sm transition hover:brightness-105 disabled:opacity-50"><Save className="h-4 w-4"/>{busy===article.id?'Saving…':'Save & Publish'}</button></div>}
+  </article>})}
+ </section>;
 };
