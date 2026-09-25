@@ -8,7 +8,10 @@ import { errorHandler, notFound } from './middleware/errorHandler.js';
 import path from 'node:path';
 import { requestContext } from './middleware/request.middleware.js';
 
-export const app = express();
+const app = express();
+
+export { app };
+export default app;
 
 app.disable('x-powered-by');
 if (env.TRUST_PROXY) app.set('trust proxy', env.TRUST_PROXY);
