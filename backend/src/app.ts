@@ -9,7 +9,6 @@ import path from 'node:path';
 import { requestContext } from './middleware/request.middleware.js';
 
 const app = express();
-
 export { app };
 export default app;
 
